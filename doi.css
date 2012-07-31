@@ -1,0 +1,7 @@
+.tocDoi span {
+    font-size:0.9em;
+    margin-left: 30px;
+    padding-left: 30px;
+    background-image: url("doi.gif");
+    background-repeat: no-repeat;
+}
