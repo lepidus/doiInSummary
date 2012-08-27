@@ -26,7 +26,6 @@ class DoiPlugin extends GenericPlugin {
 		$success = parent::register($category, $path);
 		if (!Config::getVar('general', 'installed') || defined('RUNNING_UPGRADE')) return true;
 		if ($success && $this->getEnabled()) {
-			HookRegistry::register('TemplateManager::include', array($this, 'onDisplay'));
 			HookRegistry::register('TemplateManager::display', array(&$this, 'templateManagerCallback'));
 		}
 		return $success;
@@ -49,18 +48,32 @@ class DoiPlugin extends GenericPlugin {
 		return $this->getPluginPath() . '/settings.xml';
 	}
 
-	function onDisplay($hookName, $params) {
-		$template =& $params[1]["smarty_include_tpl_file"];
-		if ($template == "issue/issue.tpl") {
-			$template = $this->getTemplatePath() . '/issue.tpl';
+	function templateManagerCallback($hookName, $args) {
+		$smarty =& $args[0];
+		$baseUrl = $smarty->get_template_vars('baseUrl');
+		$smarty->addStyleSheet($baseUrl . '/plugins/generic/doi/doi.css');
+		if ($args[1] == "issue/viewPage.tpl") {
+			$smarty->register_prefilter(array(&$this, 'outputFilter'));
 		}
-		return false;
 	}
 
-	function templateManagerCallback($hookName, $args) {
-		$templateMgr =& $args[0];
-		$baseUrl = $templateMgr->get_template_vars('baseUrl');
-		$templateMgr->addStyleSheet($baseUrl . '/plugins/generic/doi/doi.css');
+	function outputFilter($output, &$smarty) {
+		$split = preg_split('#(<td class="tocPages">.*</tr>)#s', $output, 2);
+
+		if (sizeof($split) == 2) {
+			$smarty->unregister_prefilter('outputFilter');
+			$snippet = <<<'END'
+				{if $article->getDOI()}
+				<tr>
+					<td class="tocDoi">
+					<span><a href="http://dx.doi.org/{$article->getDOI()|escape}">{$article->getDOI()|escape}</a></span>
+					</td>
+				</tr>
+				{/if}
+END;
+			$output = $split[0] . $snippet . $split[1];
+		}
+		return $output;
 	}
 }
 ?>
