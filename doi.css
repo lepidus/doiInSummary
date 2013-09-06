@@ -5,3 +5,7 @@
     background-image: url("doi.gif");
     background-repeat: no-repeat;
 }
+
+.tocDoi {
+	padding-bottom: 10px;
+}
