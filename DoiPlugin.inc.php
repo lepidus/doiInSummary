@@ -23,12 +23,12 @@ class DoiPlugin extends GenericPlugin {
 	 * 	the plugin will not be registered.
 	 */
 	function register($category, $path) {
-		$success = parent::register($category, $path);
-		if (!Config::getVar('general', 'installed') || defined('RUNNING_UPGRADE')) return true;
-		if ($success && $this->getEnabled()) {
-			HookRegistry::register('TemplateManager::display', array(&$this, 'templateManagerCallback'));
+		if (!parent::register($category, $path)) {
+			return false;
 		}
-		return $success;
+		HookRegistry::register ('Installer::postInstall', array(&$this, 'clearCache'));	
+		HookRegistry::register('TemplateManager::display', array(&$this, 'templateManagerCallback'));
+		return true;
 	}
 
 	function getDisplayName() {
@@ -37,6 +37,12 @@ class DoiPlugin extends GenericPlugin {
 
 	function getDescription() {
 		return __('plugins.generic.doi.description');
+	}
+
+	function clearCache($hookName, $args) {
+		$templateMgr =& TemplateManager::getManager();
+		$templateMgr->clearTemplateCache();
+		return false;
 	}
 
 	/**
@@ -52,8 +58,12 @@ class DoiPlugin extends GenericPlugin {
 		$smarty =& $args[0];
 		$baseUrl = $smarty->get_template_vars('baseUrl');
 		$smarty->addStyleSheet($baseUrl . '/plugins/generic/doi/doi.css');
-		if ($args[1] == "issue/viewPage.tpl") {
+
+		switch ($args[1]) {
+		case "issue/viewPage.tpl":
+		case "index/journal.tpl":
 			$smarty->register_prefilter(array(&$this, 'outputFilter'));
+			break;
 		}
 	}
 
@@ -63,12 +73,20 @@ class DoiPlugin extends GenericPlugin {
 		if (sizeof($split) == 2) {
 			$smarty->unregister_prefilter('outputFilter');
 			$snippet = <<<'END'
-				{if $article->getDOI()}
+				{php}$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "doiplugin")){/php}
+				{if $doiPlugin->getEnabled()}
+				{if method_exists($article, "getPubId")}
+					{assign var="doi" value=$article->getPubId('doi')}
+				{else}
+					{assign var="doi" value=$article->getDoi()}
+				{/if}
+				{if $doi}
 				<tr>
 					<td class="tocDoi">
-					<span><a href="http://dx.doi.org/{$article->getDOI()|escape}">{$article->getDOI()|escape}</a></span>
+					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
 					</td>
 				</tr>
+				{/if}
 				{/if}
 END;
 			$output = $split[0] . $snippet . $split[1];
