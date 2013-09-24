@@ -26,8 +26,9 @@ class DoiPlugin extends GenericPlugin {
 		if (!parent::register($category, $path)) {
 			return false;
 		}
-		HookRegistry::register ('Installer::postInstall', array(&$this, 'clearCache'));	
+		HookRegistry::register ('Installer::postInstall', array(&$this, 'clearCache'));
 		HookRegistry::register('TemplateManager::display', array(&$this, 'templateManagerCallback'));
+		$this->addLocaleData();
 		return true;
 	}
 

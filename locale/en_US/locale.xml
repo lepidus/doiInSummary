@@ -12,7 +12,7 @@
   * $Id$
   -->
  
-<locale name="pt_BR" full_name="Português (Brasil)">
-	<message key="plugins.generic.doi.displayName">Exibição do DOI no sumário</message>
-	<message key="plugins.generic.doi.description">O plugin para mostrar o DOI no sumário.</message>
+<locale name="en_US" full_name="Português (Brasil)">
+	<message key="plugins.generic.doi.displayName">Show DOI in summary</message>
+	<message key="plugins.generic.doi.description">Plugin that show DOI in the summary.</message>
 </locale>
