@@ -69,9 +69,9 @@ class DoiPlugin extends GenericPlugin {
 	}
 
 	function outputFilter($output, &$smarty) {
-		$split = preg_split('#(<td class="tocPages">.*</tr>)#s', $output, 2);
+		$split = preg_split('#(<td class="tocPages">.*</tr>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
 
-		if (sizeof($split) == 2) {
+		if (sizeof($split) == 3) {
 			$smarty->unregister_prefilter('outputFilter');
 			$snippet = <<<'END'
 				{php}$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "doiplugin")){/php}
@@ -90,7 +90,7 @@ class DoiPlugin extends GenericPlugin {
 				{/if}
 				{/if}
 END;
-			$output = $split[0] . $snippet . $split[1];
+			$output = $split[0] . $split[1] . $snippet . $split[2];
 		}
 		return $output;
 	}
