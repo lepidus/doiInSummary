@@ -69,7 +69,11 @@ class DoiPlugin extends GenericPlugin {
 	}
 
 	function outputFilter($output, &$smarty) {
-		$split = preg_split('#(<td class="tocPages">.*</tr>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
+		if ($smarty->_current_file !== "issue/issue.tpl") {
+			return $output;
+		}
+		
+		$split = preg_split('#(<div class="tocAuthors">.*?</div>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
 
 		if (sizeof($split) == 3) {
 			$smarty->unregister_prefilter('outputFilter');
@@ -82,11 +86,11 @@ class DoiPlugin extends GenericPlugin {
 					{assign var="doi" value=$article->getDoi()}
 				{/if}
 				{if $doi}
-				<tr>
-					<td class="tocDoi">
+				<div>
+					<div class="tocDoi">
 					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
-					</td>
-				</tr>
+					</div>
+				</div>
 				{/if}
 				{/if}
 END;
