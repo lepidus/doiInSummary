@@ -80,11 +80,7 @@ class DoiPlugin extends GenericPlugin {
 			$snippet = <<<'END'
 				{php}$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "doiplugin")){/php}
 				{if $doiPlugin->getEnabled()}
-				{if method_exists($article, "getPubId")}
-					{assign var="doi" value=$article->getPubId('doi')}
-				{else}
-					{assign var="doi" value=$article->getDoi()}
-				{/if}
+				{assign var="doi" value=$article->getStoredPubId('doi')}
 				{if $doi}
 				<div>
 					<div class="tocDoi">
