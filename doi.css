@@ -4,6 +4,7 @@
     padding-left: 30px;
     background-image: url("doi.gif");
     background-repeat: no-repeat;
+    background-position: left center;
 }
 
 .tocDoi {
