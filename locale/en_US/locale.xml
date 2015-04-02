@@ -2,17 +2,11 @@
 <!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
 
 <!--
-  * locale.xml
-  *
-  * Copyright (c) 2003-2012 John Willinsky
+  * Copyright (c) 2015 Lepidus Tecnologia
   * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
-  *
-  * COinS plugin localization strings for the pt_BR (Português (Brasil)) locale.
-  *
-  * $Id$
   -->
- 
+
 <locale name="en_US" full_name="Português (Brasil)">
-	<message key="plugins.generic.doi.displayName">Show DOI in summary</message>
-	<message key="plugins.generic.doi.description">Plugin that show DOI in the summary.</message>
+	<message key="plugins.generic.doiInSummary.displayName">Show DOI in summary</message>
+	<message key="plugins.generic.doiInSummary.description">Plugin that show DOI in the summary.</message>
 </locale>
