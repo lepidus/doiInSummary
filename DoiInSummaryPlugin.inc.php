@@ -9,13 +9,15 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 
 class DoiInSummaryPlugin extends GenericPlugin {
 
-	function register($category, $path) {
-		if (!parent::register($category, $path)) {
+	function register($category, $path, $mainContextId = null) {
+		if (!parent::register($category, $path, $mainContextId)) {
 			return false;
 		}
-		HookRegistry::register ('Installer::postInstall', array(&$this, 'clearCache'));
-		HookRegistry::register('TemplateManager::display', array(&$this, 'templateManagerCallback'));
+
+		HookRegistry::register ('Installer::postInstall', array($this, 'clearCache'));
+		HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
 		$this->addLocaleData();
+
 		return true;
 	}
 
@@ -28,7 +30,7 @@ class DoiInSummaryPlugin extends GenericPlugin {
 	}
 
 	function clearCache($hookName, $args) {
-		$templateMgr =& TemplateManager::getManager();
+		$templateMgr = TemplateManager::getManager();
 		$templateMgr->clearTemplateCache();
 		return false;
 	}
@@ -38,29 +40,38 @@ class DoiInSummaryPlugin extends GenericPlugin {
 	}
 
 	function templateManagerCallback($hookName, $args) {
-		$smarty =& $args[0];
-		$baseUrl = $smarty->get_template_vars('baseUrl');
-		$smarty->addStyleSheet($baseUrl . '/plugins/generic/doiInSummary/doi.css');
+		/* ANOTAÇÕES EM LOG */
+		error_log("CARREGANDO O CSS");
+		/* ---------------- */
 
+		$request = Application::getRequest();
+		$url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
+		$templateMgr = TemplateManager::getManager($request);
+		$templateMgr->addStyleSheet('doiCSS', $url);
+
+
+		/* ANOTAÇÕES EM LOG */
+		error_log("TRABALHANDO NOS PARAMETROS PARA MOSTRAR NA TELA");
+		/* ---------------- */
 		switch ($args[1]) {
 		case "issue/viewPage.tpl":
 		case "index/journal.tpl":
-			$smarty->register_prefilter(array(&$this, 'outputFilter'));
+			$templateMgr->register_prefilter(array($this, 'outputFilter'));
 			break;
 		}
 	}
 
-	function outputFilter($output, &$smarty) {
-		if ($smarty->_current_file !== "issue/issue.tpl") {
+	function outputFilter($output, $templateMgr) {
+		if ($templateMgr->_current_file !== "issue/issue.tpl") {
 			return $output;
 		}
 
 		$split = preg_split('#(<div class="tocAuthors">.*?</div>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
 
 		if (sizeof($split) == 3) {
-			$smarty->unregister_prefilter('outputFilter');
+			$templateMgr->unregister_prefilter('outputFilter');
 			$snippet = <<<'END'
-				{php}$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "doiinsummaryplugin")){/php}
+				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "doiinsummaryplugin"))
 				{if $doiPlugin->getEnabled()}
 				{assign var="doi" value=$article->getStoredPubId('doi')}
 				{if $doi}
