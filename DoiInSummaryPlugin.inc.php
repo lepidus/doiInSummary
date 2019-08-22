@@ -9,7 +9,7 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 
 class DoiInSummaryPlugin extends GenericPlugin {
 
-	function register($category, $path) {
+	function register($category, $path, $mainContextId = NULL) {
 		if (!parent::register($category, $path)) {
 			return false;
 		}
@@ -67,6 +67,7 @@ class DoiInSummaryPlugin extends GenericPlugin {
 				<div>
 					<div class="tocDoi">
 					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
+					<span> rita </span>
 					</div>
 				</div>
 				{/if}
