@@ -9,18 +9,26 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 
 class DoiInSummaryPlugin extends GenericPlugin {
 
-	function register($category, $path, $mainContextId = null) {
+	function register($category, $path, $mainContextId = NULL) {
+		error_log("FUNÇÃO REGISTER CHAMADA");
+		
 		if (!parent::register($category, $path, $mainContextId)) {
 			return false;
 		}
 
-		print_r(error_log("FUNÇÃO REGISTER CHAMADA", true));
-		print_r(error_log($category, true));
-
-
 		HookRegistry::register ('Installer::postInstall', array($this, 'clearCache'));
 		HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
 		$this->addLocaleData();
+
+		/* ANOTAÇÕES EM LOG */
+		error_log("CARREGANDO O CSS");
+		error_log("-------------------------------");
+		/* ---------------- */
+
+		$request = Application::getRequest();
+		$url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
+		$templateMgr = TemplateManager::getManager($request);
+		$templateMgr->addStyleSheet('doiCSS', $url);
 
 		return true;
 	}
@@ -34,6 +42,11 @@ class DoiInSummaryPlugin extends GenericPlugin {
 	}
 
 	function clearCache($hookName, $args) {
+		/* ANOTAÇÕES EM LOG */
+		error_log("CLEAR CACHE");
+		error_log("-------------------------------");
+		/* ---------------- */
+
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->clearTemplateCache();
 		return false;
@@ -44,52 +57,65 @@ class DoiInSummaryPlugin extends GenericPlugin {
 	}
 
 	function templateManagerCallback($hookName, $args) {
-		/* ANOTAÇÕES EM LOG */
-		error_log("CARREGANDO O CSS");
-		/* ---------------- */
 
+		error_log("FUNÇÃO TEMPLATEMANAGERCALLBACK");
 		$request = Application::getRequest();
-		$url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
 		$templateMgr = TemplateManager::getManager($request);
-		$templateMgr->addStyleSheet('doiCSS', $url);
-
+		
+		/* ANOTAÇÕES EM LOG */
+		error_log("SWITCH CASE DA TEMPLATEMNG");
+		/* ---------------- */
 
 		/* ANOTAÇÕES EM LOG */
-		error_log("TRABALHANDO NOS PARAMETROS PARA MOSTRAR NA TELA");
+		error_log("PAGINA IDENTIFICADA PELO CALLBACK");
+		error_log("$args[1]");
 		/* ---------------- */
+
 		switch ($args[1]) {
-		case "issue/viewPage.tpl":
-		case "index/journal.tpl":
-			$templateMgr->register_prefilter(array($this, 'outputFilter'));
+		case "frontend/pages/indexJournal.tpl":
+			error_log("break");
+			break;
+		case "frontend/pages/issue.tpl":
+			// $templateMgr->registerFilter('pre',array($this, 'outputFilter'));
+			error_log("TESTANDO NOVO HOOK");
+			//MEXER NESTE HOOK AQUI / https://github.com/pkp/ojs/blob/master/plugins/generic/htmlArticleGalley/HtmlArticleGalleyPlugin.inc.php
+			HookRegistry::call('DoiInSummaryPlugin::outputFilter', array(true, true));
 			break;
 		}
+		return true;	
 	}
 
 	function outputFilter($output, $templateMgr) {
-		if ($templateMgr->_current_file !== "issue/issue.tpl") {
-			return $output;
-		}
 
-		$split = preg_split('#(<div class="tocAuthors">.*?</div>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
+		/* ANOTAÇÕES EM LOG */
+		error_log("FUNÇÃO outputFilter");
+		error_log("-------------------------------");
+		/* ---------------- */
 
-		if (sizeof($split) == 3) {
-			$templateMgr->unregister_prefilter('outputFilter');
-			$snippet = <<<'END'
-				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "doiinsummaryplugin"))
-				{if $doiPlugin->getEnabled()}
-				{assign var="doi" value=$article->getStoredPubId('doi')}
-				{if $doi}
-				<div>
-					<div class="tocDoi">
-					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
-					</div>
-				</div>
-				{/if}
-				{/if}
-END;
-			$output = $split[0] . $split[1] . $snippet . $split[2];
-		}
-		return $output;
+// 		if ($templateMgr->_current_file !== "issue/issue.tpl") {
+// 			return $output;
+// 		}
+
+// 		$split = preg_split('#(<div class="tocAuthors">.*?</div>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
+
+// 		if (sizeof($split) == 3) {
+// 			$templateMgr->unregister_prefilter('outputFilter');
+// 			$snippet = <<<'END'
+// 				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "doiinsummaryplugin"))
+// 				{if $doiPlugin->getEnabled()}
+// 				{assign var="doi" value=$article->getStoredPubId('doi')}
+// 				{if $doi}
+// 				<div>
+// 					<div class="tocDoi">
+// 					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
+// 					</div>
+// 				</div>
+// 				{/if}
+// 				{/if}
+// END;
+// 			$output = $split[0] . $split[1] . $snippet . $split[2];
+// 		}
+		return false;
 	}
 }
 ?>
