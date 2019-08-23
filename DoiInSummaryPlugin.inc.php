@@ -14,6 +14,10 @@ class DoiInSummaryPlugin extends GenericPlugin {
 			return false;
 		}
 
+		print_r(error_log("FUNÇÃO REGISTER CHAMADA", true));
+		print_r(error_log($category, true));
+
+
 		HookRegistry::register ('Installer::postInstall', array($this, 'clearCache'));
 		HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
 		$this->addLocaleData();
