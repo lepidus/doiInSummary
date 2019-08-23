@@ -9,15 +9,8 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 
 class DoiInSummaryPlugin extends GenericPlugin {
 
-<<<<<<< HEAD
 	function register($category, $path, $mainContextId = null) {
 		if (!parent::register($category, $path, $mainContextId)) {
-=======
-	function register($category, $path, $mainContextId = NULL) {
-		print_r(error_log("FUNÇÃO REGISTER CHAMADA", true));
-		print_r(error_log($category, true));
-		if (!parent::register($category, $path)) {
->>>>>>> fb6626ce8b52752417a4141347deea0c57f99bdb
 			return false;
 		}
 
@@ -47,7 +40,6 @@ class DoiInSummaryPlugin extends GenericPlugin {
 	}
 
 	function templateManagerCallback($hookName, $args) {
-<<<<<<< HEAD
 		/* ANOTAÇÕES EM LOG */
 		error_log("CARREGANDO O CSS");
 		/* ---------------- */
@@ -57,11 +49,6 @@ class DoiInSummaryPlugin extends GenericPlugin {
 		$templateMgr = TemplateManager::getManager($request);
 		$templateMgr->addStyleSheet('doiCSS', $url);
 
-=======
-		$smarty = $args[0];
-		$baseUrl = $smarty->get_template_vars('baseUrl');
-		$smarty->addStyleSheet($baseUrl . '/plugins/generic/doiInSummary/doi.css');
->>>>>>> fb6626ce8b52752417a4141347deea0c57f99bdb
 
 		/* ANOTAÇÕES EM LOG */
 		error_log("TRABALHANDO NOS PARAMETROS PARA MOSTRAR NA TELA");
@@ -91,7 +78,6 @@ class DoiInSummaryPlugin extends GenericPlugin {
 				<div>
 					<div class="tocDoi">
 					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
-					<span> rita </span>
 					</div>
 				</div>
 				{/if}
