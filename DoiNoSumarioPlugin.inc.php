@@ -7,7 +7,7 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
-class DoiInSummaryPlugin extends GenericPlugin {
+class DoiNoSumarioPlugin extends GenericPlugin {
 
 	function register($category, $path, $mainContextId = NULL) {
 		error_log("FUNÇÃO REGISTER CHAMADA");
@@ -79,7 +79,7 @@ class DoiInSummaryPlugin extends GenericPlugin {
 			// $templateMgr->registerFilter('pre',array($this, 'outputFilter'));
 			error_log("TESTANDO NOVO HOOK");
 			//MEXER NESTE HOOK AQUI / https://github.com/pkp/ojs/blob/master/plugins/generic/htmlArticleGalley/HtmlArticleGalleyPlugin.inc.php
-			HookRegistry::call('DoiInSummaryPlugin::outputFilter', array(true, true));
+			HookRegistry::call('DoiNoSumarioPlugin::outputFilter', array(true, true));
 			break;
 		}
 		return true;	
@@ -101,7 +101,7 @@ class DoiInSummaryPlugin extends GenericPlugin {
 // 		if (sizeof($split) == 3) {
 // 			$templateMgr->unregister_prefilter('outputFilter');
 // 			$snippet = <<<'END'
-// 				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "doiinsummaryplugin"))
+// 				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "DoiNoSumarioPlugin"))
 // 				{if $doiPlugin->getEnabled()}
 // 				{assign var="doi" value=$article->getStoredPubId('doi')}
 // 				{if $doi}
