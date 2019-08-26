@@ -21,7 +21,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 		$this->addLocaleData();
 
 		/* ANOTAÇÕES EM LOG */
-		error_log("CARREGANDO O CSS");
+		error_log("CARREGANDO O CSS"); 
 		error_log("-------------------------------");
 		/* ---------------- */
 
@@ -63,7 +63,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 		$templateMgr = TemplateManager::getManager($request);
 		
 		/* ANOTAÇÕES EM LOG */
-		error_log("SWITCH CASE DA TEMPLATEMNG");
+		error_log("SWITCH CASE DA TEMPLATE_MNG");
 		/* ---------------- */
 
 		/* ANOTAÇÕES EM LOG */
@@ -76,21 +76,21 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 			error_log("break");
 			break;
 		case "frontend/pages/issue.tpl":
-			// $templateMgr->registerFilter('pre',array($this, 'outputFilter'));
-			error_log("TESTANDO NOVO HOOK");
-			//MEXER NESTE HOOK AQUI / https://github.com/pkp/ojs/blob/master/plugins/generic/htmlArticleGalley/HtmlArticleGalleyPlugin.inc.php
-			HookRegistry::call('DoiNoSumarioPlugin::outputFilter', array(true, true));
+			$templateMgr->registerFilter('pre',array($this, 'outputFilter'));
+			error_log("Registro de pré filtro");
+		
 			break;
 		}
-		return true;	
+		
 	}
+	// Antiga função 'outputFilter', deprecidada
 
-	function outputFilter($output, $templateMgr) {
+// 	function outputFilter($output, $templateMgr) {
 
-		/* ANOTAÇÕES EM LOG */
-		error_log("FUNÇÃO outputFilter");
-		error_log("-------------------------------");
-		/* ---------------- */
+// 		/* ANOTAÇÕES EM LOG */
+// 		error_log("FUNÇÃO outputFilter");
+// 		error_log("-------------------------------");
+// 		/* ---------------- */
 
 // 		if ($templateMgr->_current_file !== "issue/issue.tpl") {
 // 			return $output;
@@ -115,7 +115,18 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 // END;
 // 			$output = $split[0] . $split[1] . $snippet . $split[2];
 // 		}
+// 		return false;
+// 	}
+
+	function outputFilter($output, $templateMgr){
+		/* ANOTAÇÕES EM LOG */
+		error_log("FUNÇÃO outputFilter");
+		error_log("-------------------------------");
+		/* ---------------- */
+
 		return false;
 	}
+
 }
+
 ?>
