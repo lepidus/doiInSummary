@@ -5,8 +5,8 @@
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  */
 
-require_once('DoiInSummaryPlugin.inc.php');
+require_once('DoiNoSumarioPlugin.inc.php');
 
-return new DoiInSummaryPlugin();
+return new DoiNoSumarioPlugin();
 
 ?>

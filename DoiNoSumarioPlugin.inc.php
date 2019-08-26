@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * Copyright (c) 2015 Lepidus Tecnologia
+ * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ */
+
+import('lib.pkp.classes.plugins.GenericPlugin');
+
+class DoiNoSumarioPlugin extends GenericPlugin {
+
+	function register($category, $path, $mainContextId = NULL) {
+		error_log("FUNÇÃO REGISTER CHAMADA");
+		
+		if (!parent::register($category, $path, $mainContextId)) {
+			return false;
+		}
+
+		HookRegistry::register ('Installer::postInstall', array($this, 'clearCache'));
+		HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
+		$this->addLocaleData();
+
+		/* ANOTAÇÕES EM LOG */
+		error_log("CARREGANDO O CSS"); 
+		error_log("-------------------------------");
+		/* ---------------- */
+
+		$request = Application::getRequest();
+		$url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
+		$templateMgr = TemplateManager::getManager($request);
+		$templateMgr->addStyleSheet('doiCSS', $url);
+
+		return true;
+	}
+
+	function getDisplayName() {
+		return __('plugins.generic.doiInSummary.displayName');
+	}
+
+	function getDescription() {
+		return __('plugins.generic.doiInSummary.description');
+	}
+
+	function clearCache($hookName, $args) {
+		/* ANOTAÇÕES EM LOG */
+		error_log("CLEAR CACHE");
+		error_log("-------------------------------");
+		/* ---------------- */
+
+		$templateMgr = TemplateManager::getManager();
+		$templateMgr->clearTemplateCache();
+		return false;
+	}
+
+	function getInstallSitePluginSettingsFile() {
+		return $this->getPluginPath() . '/settings.xml';
+	}
+
+	function templateManagerCallback($hookName, $args) {
+
+		error_log("FUNÇÃO TEMPLATEMANAGERCALLBACK");
+		$request = Application::getRequest();
+		$templateMgr = TemplateManager::getManager($request);
+		
+		/* ANOTAÇÕES EM LOG */
+		error_log("SWITCH CASE DA TEMPLATE_MNG");
+		/* ---------------- */
+
+		/* ANOTAÇÕES EM LOG */
+		error_log("PAGINA IDENTIFICADA PELO CALLBACK");
+		error_log("$args[1]");
+		/* ---------------- */
+
+		switch ($args[1]) {
+		case "frontend/pages/indexJournal.tpl":
+			error_log("break");
+			break;
+		case "frontend/pages/issue.tpl":
+			$templateMgr->registerFilter('pre',array($this, 'outputFilter'));
+			error_log("Registro de pré filtro");
+		
+			break;
+		}
+		
+	}
+	// Antiga função 'outputFilter', deprecidada
+
+// 	function outputFilter($output, $templateMgr) {
+
+// 		/* ANOTAÇÕES EM LOG */
+// 		error_log("FUNÇÃO outputFilter");
+// 		error_log("-------------------------------");
+// 		/* ---------------- */
+
+// 		if ($templateMgr->_current_file !== "issue/issue.tpl") {
+// 			return $output;
+// 		}
+
+// 		$split = preg_split('#(<div class="tocAuthors">.*?</div>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
+
+// 		if (sizeof($split) == 3) {
+// 			$templateMgr->unregister_prefilter('outputFilter');
+// 			$snippet = <<<'END'
+// 				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "DoiNoSumarioPlugin"))
+// 				{if $doiPlugin->getEnabled()}
+// 				{assign var="doi" value=$article->getStoredPubId('doi')}
+// 				{if $doi}
+// 				<div>
+// 					<div class="tocDoi">
+// 					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
+// 					</div>
+// 				</div>
+// 				{/if}
+// 				{/if}
+// END;
+// 			$output = $split[0] . $split[1] . $snippet . $split[2];
+// 		}
+// 		return false;
+// 	}
+
+	function outputFilter($output, $templateMgr){
+		/* ANOTAÇÕES EM LOG */
+		error_log("FUNÇÃO outputFilter");
+		error_log("-------------------------------");
+		/* ---------------- */
+
+		return false;
+	}
+
+}
+
+?>
