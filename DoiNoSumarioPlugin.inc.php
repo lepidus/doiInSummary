@@ -17,9 +17,11 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 		}
 	
 
-		HookRegistry::register ('Installer::postInstall', array($this, 'clearCache'));
+		// HookRegistry::register ('Installer::postInstall', array($this, 'clearCache'));
+		// HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
+		// HookRegistry::register('TemplateManager::registerFilter', array($this, 'outputFilter'));
+
 		HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
-		HookRegistry::register('TemplateManager::registerFilter', array($this, 'outputFilter'));
 		$this->addLocaleData();
 
 		/* ANOTAÇÕES EM LOG */
@@ -80,8 +82,10 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 			error_log("break");
 			break;
 		case "frontend/pages/issue.tpl":
-			error_log("Registro de pré filtro");
-			HookRegistry::call('TemplateManager::registerFilter', array($this, 'pre'));
+			error_log("Registro de out filtro");
+			$templateMgr->registerFilter('output',array($this, 'outputFilter'));
+	
+			//HookRegistry::call('TemplateManager::registerFilter', array($this, 'pre'));
 			break;
 		}
 		
@@ -96,34 +100,34 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 		error_log("-------------------------------");
 		/* ---------------- */
 
-		error_log("Output variável: " . $output);
+		//error_log("Output variável: " . $output);
 
-		if ($templateMgr->_current_file !== "issue/issue.tpl") {
-			return $output;
-		}
+// 		if ($templateMgr->_current_file !== "issue/issue.tpl") {
+// 			return $output;
+// 		}
 
-		$split = preg_split('#(<div class="tocAuthors">.*?</div>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
+// 		$split = preg_split('#(<div class="tocAuthors">.*?</div>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
 
-		var_dump($split);
+// 		var_dump($split);
 		
-		if (sizeof($split) == 3) {
-			$templateMgr->unregister_prefilter('outputFilter');
-			$snippet = <<<'END'
-				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "DoiNoSumarioPlugin"))
-				{if $doiPlugin->getEnabled()}
-				{assign var="doi" value=$article->getStoredPubId('doi')}
-				{if $doi}
-				<div>
-					<div class="tocDoi">
-					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
-					</div>
-				</div>
-				{/if}
-				{/if}
-END;
-			$output = $split[0] . $split[1] . $snippet . $split[2];
-		}
-		return false;
+// 		if (sizeof($split) == 3) {
+// 			$templateMgr->unregister_prefilter('outputFilter');
+// 			$snippet = <<<'END'
+// 				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "DoiNoSumarioPlugin"))
+// 				{if $doiPlugin->getEnabled()}
+// 				{assign var="doi" value=$article->getStoredPubId('doi')}
+// 				{if $doi}
+// 				<div>
+// 					<div class="tocDoi">
+// 					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
+// 					</div>
+// 				</div>
+// 				{/if}
+// 				{/if}
+// END;
+// 			$output = $split[0] . $split[1] . $snippet . $split[2];
+// 		}
+		return $output;
 	}
 
 	// function outputFilter(){
