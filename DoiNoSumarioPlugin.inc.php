@@ -83,6 +83,12 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 			error_log("break");
 			break;
 		case "frontend/pages/issue.tpl":
+			
+
+			error_log("carregando o PUBIDS no template manager array");
+			$pubIdPlugins = PluginRegistry::loadCategory('pubIds', true);
+			$templateMgr->assign('pubIdPlugins', $pubIdPlugins);
+
 			error_log("Registro de out filtro");
 			$templateMgr->registerFilter('output',array($this, 'outputFilter'));
 	
@@ -114,9 +120,9 @@ class DoiNoSumarioPlugin extends GenericPlugin {
  		$split = preg_split('#(<div class="authors">.*?</div>)#s', $output,-1, PREG_SPLIT_DELIM_CAPTURE);
 		
 		for ($i=0; $i < sizeof($split); $i++ ) { 
-			if($i === 3){
+			if($i % 2 === 0){
 
-				$string = "<div id='ritando'> RITAAAA </div>";
+				$string = "<div id='DoiNoProgramador'> {Aqui deve aparecer o DOI} </div>";
 				$split[$i] .= $string;
 				
 				$retornoTPL .= $split[$i];
