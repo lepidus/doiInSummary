@@ -34,6 +34,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 		$templateMgr = TemplateManager::getManager($request);
 		$templateMgr->addStyleSheet('doiCSS', $url);
 
+
 		return true;
 	}
 
@@ -110,10 +111,19 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 // 			return $output;
 // 		}
 
- 		$split = preg_split('#(<div class="authors">.*?</div>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
-		 var_dump($split);
+ 		$split = preg_split('#(<div class="authors">.*?</div>)#s', $output,-1, PREG_SPLIT_DELIM_CAPTURE);
 		
+		for ($i=0; $i < sizeof($split); $i++ ) { 
+			if($i === 3){
 
+				$string = "<div id='ritando'> RITAAAA </div>";
+				$split[$i] .= $string;
+				
+				$retornoTPL .= $split[$i];
+			}else{
+				$retornoTPL .= $split[$i];
+			}
+		}
 		
 // 		if (sizeof($split) == 3) {
 // 			$templateMgr->unregister_prefilter('outputFilter');
@@ -132,7 +142,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 // END;
 // 			$output = $split[0] . $split[1] . $snippet . $split[2];
 // 		}
-		return $output;
+		return $retornoTPL;
 	}
 
 }
