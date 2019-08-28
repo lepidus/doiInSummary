@@ -100,15 +100,20 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 		error_log("-------------------------------");
 		/* ---------------- */
 
+		if($templateMgr->source->filepath !== "app:frontendpagesissue.tpl"){
+			return $output;
+		}
+
 		//error_log("Output variável: " . $output);
 
 // 		if ($templateMgr->_current_file !== "issue/issue.tpl") {
 // 			return $output;
 // 		}
 
-// 		$split = preg_split('#(<div class="tocAuthors">.*?</div>)#s', $output, 2, PREG_SPLIT_DELIM_CAPTURE);
+ 		$split = preg_split('#(<div class="authors">.*?</div>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
+		 var_dump($split);
+		
 
-// 		var_dump($split);
 		
 // 		if (sizeof($split) == 3) {
 // 			$templateMgr->unregister_prefilter('outputFilter');
@@ -129,15 +134,6 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 // 		}
 		return $output;
 	}
-
-	// function outputFilter(){
-	// 	/* ANOTAÇÕES EM LOG */
-	// 	error_log("FUNÇÃO outputFilter");
-	// 	error_log("-------------------------------");
-	// 	/* ---------------- */
-
-	// 	return true;
-	// }
 
 }
 
