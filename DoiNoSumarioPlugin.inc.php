@@ -10,155 +10,101 @@ import('classes.article.ArticleDAO');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
-	function register($category, $path, $mainContextId = NULL) {
-		error_log("FUNÇÃO REGISTER CHAMADA");
+    public function register($category, $path, $mainContextId = null){
 		
-		if (!parent::register($category, $path, $mainContextId)) {
-			return false;
-		}
-	
+		error_log("FUNÇÃO REGISTER CHAMADA");
 
-		// HookRegistry::register ('Installer::postInstall', array($this, 'clearCache'));
-		// HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
-		// HookRegistry::register('TemplateManager::registerFilter', array($this, 'outputFilter'));
+        if (!parent::register($category, $path, $mainContextId)) {
+            return false;
+        }
 
 		HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
-		$this->addLocaleData();
 
-		/* ANOTAÇÕES EM LOG */
-		error_log("CARREGANDO O CSS"); 
-		error_log("-------------------------------");
-		/* ---------------- */
+        $this->addLocaleData();
 
-		$request = Application::getRequest();
-		$url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
-		$templateMgr = TemplateManager::getManager($request);
-		$templateMgr->addStyleSheet('doiCSS', $url);
+        /* ANOTAÇÕES EM LOG */
+        error_log("CARREGANDO O CSS");
+        error_log("-------------------------------");
+        /* ---------------- */
 
-		return true;
-	}
+        $request = Application::getRequest();
+        $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
+        $templateMgr = TemplateManager::getManager($request);
+        $templateMgr->addStyleSheet('doiCSS', $url);
 
-	function getDisplayName() {
-		return __('plugins.generic.doiInSummary.displayName');
-	}
+        return true;
+    }
 
-	function getDescription() {
-		return __('plugins.generic.doiInSummary.description');
-	}
+    public function getDisplayName(){
+        return __('plugins.generic.doiInSummary.displayName');
+    }
 
-	function clearCache($hookName, $args) {
-		/* ANOTAÇÕES EM LOG */
-		error_log("CLEAR CACHE");
-		error_log("-------------------------------");
-		/* ---------------- */
+    public function getDescription(){
+        return __('plugins.generic.doiInSummary.description');
+    }
 
-		$templateMgr = TemplateManager::getManager();
-		$templateMgr->clearTemplateCache();
-		return false;
-	}
+    public function clearCache($hookName, $args){
+        $templateMgr = TemplateManager::getManager();
+        $templateMgr->clearTemplateCache();
+        return false;
+    }
 
-	function getInstallSitePluginSettingsFile() {
-		return $this->getPluginPath() . '/settings.xml';
-	}
+    public function getInstallSitePluginSettingsFile(){
+        return $this->getPluginPath() . '/settings.xml';
+    }
 
-	function templateManagerCallback($hookName, $args) {
+    public function templateManagerCallback($hookName, $args){
 
-		error_log("FUNÇÃO TEMPLATEMANAGERCALLBACK");
-		//$request = Application::getRequest();
-		//$templateMgr = TemplateManager::getManager($request);
-		
-		$templateMgr = $args[0];
+        switch ($args[1]) {
+            case "frontend/pages/indexJournal.tpl":
+            case "frontend/pages/issue.tpl":
+				$templateMgr = $args[0];
+                $templateMgr->registerFilter('output', array($this, 'addDoi'));
+            	break;
+        }
 
-		/* ANOTAÇÕES EM LOG */
-		error_log("SWITCH CASE DA TEMPLATE_MNG");
-		/* ---------------- */
+    }
 
-		/* ANOTAÇÕES EM LOG */
-		error_log("PAGINA IDENTIFICADA PELO CALLBACK");
-		error_log("$args[1]");
-		/* ---------------- */
+    public function addDoi($output, $templateMgr){
 
-		switch ($args[1]) {
-		case "frontend/pages/indexJournal.tpl":
-			error_log("break");
-			break;
-		case "frontend/pages/issue.tpl":
+		//verificando se o tpl final corresponde a página totalmente compilada
+        if ($templateMgr->source->filepath !== "app:frontendpagesissue.tpl" && $templateMgr->source->filepath !== "app:frontendpagesindexJournal") {
+            return $output;
+        }
 
-			error_log("Registro de out filtro");
-			$templateMgr->registerFilter('output',array($this, 'outputFilter'));
-	
-			//HookRegistry::call('TemplateManager::registerFilter', array($this, 'pre'));
-			break;
-		}
-		
-	}
+		// usando expressão regular para pegar todas as divs "title"
+        $split = preg_split('#(<div class="title">.*?</div>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-	// Antiga função 'outputFilter', deprecidada
+		//instanciando um article para buscar pelo id
+		$ArticleDAO = new ArticleDAO();
 
-	function outputFilter($output, $templateMgr) {
+        for ($i = 0; $i < sizeof($split); $i++) {
+            if ($i % 2 !== 0) {
 
-		/* ANOTAÇÕES EM LOG */
-		error_log("FUNÇÃO outputFilter");
-		error_log("-------------------------------");
-		/* ---------------- */
+                preg_match('#.+view\/([0-9]*)#', $split[$i], $obj);
 
-		if($templateMgr->source->filepath !== "app:frontendpagesissue.tpl"){
-			return $output;
-		}
-
-		//error_log("Output variável: " . $output);
-
-// 		if ($templateMgr->_current_file !== "issue/issue.tpl") {
-// 			return $output;
-// 		}
-
-		 $split = preg_split('#(<div class="title">.*?</div>)#s', $output,-1, PREG_SPLIT_DELIM_CAPTURE);
-
-		$article = new ArticleDAO();
-		// $novoArticle = $article->getById('116');
-		// print_r($novoArticle);
-		
-		for ($i=0; $i < sizeof($split); $i++ ) { 
-			if($i % 2 !== 0){
-
-				$idArray = array();
-				$idDoArtigo = preg_match('#.+view\/([0-9]*)#', $split[$i], $idArray);
-
-				$articleDoi = $article->getById($idArray[1]);
-				$doiUrl02 = $articleDoi->_data['pub-id::doi'];
+				$article = $ArticleDAO->getById($obj[1]);
 				
-				$doiUrl = 'https://doi.org/' . $doiUrl02;
+				//TODO adicionar if para verificar se DOI existe
+				if(isset($article->_data['pub-id::doi'])){
 
-				$string = "<div id='DoiNoProgramador'> <a href='". $doiUrl ."'> DOI FUNCIONANDO -> ". $doiUrl ." </a> </div>";
-				
-				$split[$i] .= $string;
-				
-				$retornoTPL .= $split[$i];
-			}else{
-				$retornoTPL .= $split[$i];
-			}
-		}
-		
-// 		if (sizeof($split) == 3) {
-// 			$templateMgr->unregister_prefilter('outputFilter');
-// 			$snippet = <<<'END'
-// 				$this->assign("doiPlugin", PluginRegistry::getPlugin("generic", "DoiNoSumarioPlugin"))
-// 				{if $doiPlugin->getEnabled()}
-// 				{assign var="doi" value=$article->getStoredPubId('doi')}
-// 				{if $doi}
-// 				<div>
-// 					<div class="tocDoi">
-// 					<span><a href="http://dx.doi.org/{$doi|escape}">{$doi|escape}</a></span>
-// 					</div>
-// 				</div>
-// 				{/if}
-// 				{/if}
-// END;
-// 			$output = $split[0] . $split[1] . $snippet . $split[2];
-// 		}
-		return $retornoTPL;
-	}
+					if(strlen($article->_data['pub-id::doi']) > 0){
+						
+						$doiUrl = 'https://doi.org/' . $article->_data['pub-id::doi'];
+
+						$string = "<div class='doiNoSumario'> <span> DOI: </span> <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
+
+						$split[$i] .= $string;
+					}
+				}
+
+                $newTpl .= $split[$i];
+            } else {
+                $newTpl .= $split[$i];
+            }
+        }
+
+        return $newTpl;
+    }
 
 }
-
-?>
