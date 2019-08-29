@@ -6,6 +6,7 @@
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
+import('classes.article.ArticleDAO');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
@@ -33,7 +34,6 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 		$url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
 		$templateMgr = TemplateManager::getManager($request);
 		$templateMgr->addStyleSheet('doiCSS', $url);
-
 
 		return true;
 	}
@@ -83,11 +83,6 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 			error_log("break");
 			break;
 		case "frontend/pages/issue.tpl":
-			
-
-			error_log("carregando o PUBIDS no template manager array");
-			$pubIdPlugins = PluginRegistry::loadCategory('pubIds', true);
-			$templateMgr->assign('pubIdPlugins', $pubIdPlugins);
 
 			error_log("Registro de out filtro");
 			$templateMgr->registerFilter('output',array($this, 'outputFilter'));
@@ -117,12 +112,25 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 // 			return $output;
 // 		}
 
- 		$split = preg_split('#(<div class="authors">.*?</div>)#s', $output,-1, PREG_SPLIT_DELIM_CAPTURE);
+		 $split = preg_split('#(<div class="title">.*?</div>)#s', $output,-1, PREG_SPLIT_DELIM_CAPTURE);
+
+		$article = new ArticleDAO();
+		// $novoArticle = $article->getById('116');
+		// print_r($novoArticle);
 		
 		for ($i=0; $i < sizeof($split); $i++ ) { 
-			if($i % 2 === 0){
+			if($i % 2 !== 0){
 
-				$string = "<div id='DoiNoProgramador'> {Aqui deve aparecer o DOI} </div>";
+				$idArray = array();
+				$idDoArtigo = preg_match('#.+view\/([0-9]*)#', $split[$i], $idArray);
+
+				$articleDoi = $article->getById($idArray[1]);
+				$doiUrl02 = $articleDoi->_data['pub-id::doi'];
+				
+				$doiUrl = 'https://doi.org/' . $doiUrl02;
+
+				$string = "<div id='DoiNoProgramador'> <a href='". $doiUrl ."'> DOI FUNCIONANDO -> ". $doiUrl ." </a> </div>";
+				
 				$split[$i] .= $string;
 				
 				$retornoTPL .= $split[$i];
