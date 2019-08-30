@@ -16,15 +16,17 @@ class DoiNoSumarioPlugin extends GenericPlugin {
             return false;
         }
 
-		HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
+        if($this->getEnabled($mainContextId)){
+            HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
+        
+            //adicionando idiomas para o plugin
+            $this->addLocaleData();
 
-        //adicionando idiomas para o plugin
-        $this->addLocaleData();
-
-        $request = Application::getRequest();
-        $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
-        $templateMgr = TemplateManager::getManager($request);
-        $templateMgr->addStyleSheet('doiCSS', $url);
+            $request = Application::getRequest();
+            $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
+            $templateMgr = TemplateManager::getManager($request);
+            $templateMgr->addStyleSheet('doiCSS', $url);
+        }
 
         return true;
     }
@@ -52,7 +54,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         switch ($args[1]) {
             case "frontend/pages/indexJournal.tpl":
             case "frontend/pages/issue.tpl":
-				$templateMgr = $args[0];
+                $templateMgr = $args[0];
                 $templateMgr->registerFilter('output', array($this, 'addDoi'));
             	break;
         }
@@ -77,7 +79,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
 
 		//instanciando um article para buscar pelo id
-		$ArticleDAO = new ArticleDAO();
+        $ArticleDAO = new ArticleDAO();
 
         for ($i = 0; $i < sizeof($split); $i++) {
 
@@ -102,10 +104,11 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
                 $newTpl .= $split[$i];
             } else {
-                $newTpl .= $split[$i];
+                $newTpl .= $split[$i];   
             }
         }
 
+        $templateMgr->unregisterFilter('output', array($this, 'addDoi'));
         return $newTpl;
     }
 
