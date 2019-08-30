@@ -68,18 +68,26 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
 		// usando expressão regular para pegar todas as divs "title"
         $split = preg_split('#(<div class="title">.*?</div>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
+        
+        // verificando se as tags "title existem, se não existirem"
+        // o $split só retorna no primeiro indice a página completa
+        // sem os registros encontrados, ou seja, o vetor ficará com tamanho (1)
+        if(sizeof($split) <= 1){
+            return $output;
+        }
 
 		//instanciando um article para buscar pelo id
 		$ArticleDAO = new ArticleDAO();
 
         for ($i = 0; $i < sizeof($split); $i++) {
+
             if ($i % 2 !== 0) {
 
                 preg_match('#.+view\/([0-9]*)#', $split[$i], $obj);
 
 				$article = $ArticleDAO->getById($obj[1]);
 				
-				//TODO adicionar if para verificar se DOI existe
+				// adicionado if para verificar se DOI existe
 				if(isset($article->_data['pub-id::doi'])){
 
 					if(strlen($article->_data['pub-id::doi']) > 0){
