@@ -3,15 +3,11 @@
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  */
 
-.tocDoi span {
-    font-size:0.9em;
-    margin-left: 10px;
-    padding-left: 30px;
-    background-image: url("doi.gif");
-    background-repeat: no-repeat;
-    background-position: left center;
+
+.doiNoSumario{
+    margin: 5px 0;
 }
 
-.tocDoi {
-	padding-bottom: 10px;
+.doiNoSumario span{
+    font-weight: bolder;
 }

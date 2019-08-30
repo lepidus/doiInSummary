@@ -6,7 +6,7 @@
   * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
   -->
 
-<locale name="en_US" full_name="Português (Brasil)">
-	<message key="plugins.generic.doiInSummary.displayName">Show DOI in summary</message>
-	<message key="plugins.generic.doiInSummary.description">Plugin that show DOI in the summary.</message>
+<locale name="en_US" full_name="English">
+	<message key="plugins.generic.doiNoSumario.displayName">Show DOI in summary</message>
+	<message key="plugins.generic.doiNoSumario.description">Plugin that show DOI in the summary.</message>
 </locale>
