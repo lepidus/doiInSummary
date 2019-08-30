@@ -11,8 +11,6 @@ import('classes.article.ArticleDAO');
 class DoiNoSumarioPlugin extends GenericPlugin {
 
     public function register($category, $path, $mainContextId = null){
-		
-		error_log("FUNÇÃO REGISTER CHAMADA");
 
         if (!parent::register($category, $path, $mainContextId)) {
             return false;
@@ -20,12 +18,8 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
 		HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
 
+        //adicionando idiomas para o plugin
         $this->addLocaleData();
-
-        /* ANOTAÇÕES EM LOG */
-        error_log("CARREGANDO O CSS");
-        error_log("-------------------------------");
-        /* ---------------- */
 
         $request = Application::getRequest();
         $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
@@ -36,11 +30,11 @@ class DoiNoSumarioPlugin extends GenericPlugin {
     }
 
     public function getDisplayName(){
-        return __('plugins.generic.doiInSummary.displayName');
+        return __('plugins.generic.doiNoSumario.displayName');
     }
 
     public function getDescription(){
-        return __('plugins.generic.doiInSummary.description');
+        return __('plugins.generic.doiNoSumario.description');
     }
 
     public function clearCache($hookName, $args){
@@ -92,7 +86,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 						
 						$doiUrl = 'https://doi.org/' . $article->_data['pub-id::doi'];
 
-						$string = "<div class='doiNoSumario'> <span> DOI: </span> <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
+						$string = "<div class='doiNoSumario'> <span> DOI ➜  </span> <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
 
 						$split[$i] .= $string;
 					}
