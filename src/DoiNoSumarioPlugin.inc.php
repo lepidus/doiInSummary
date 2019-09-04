@@ -96,7 +96,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 						
 						$doiUrl = 'https://doi.org/' . $article->_data['pub-id::doi'];
 
-						$string = "<div class='doiNoSumario'> <span> DOI ➜  </span> <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
+						$string = "<div class='doiNoSumario'> <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
 
 						$split[$i] .= $string;
 					}
