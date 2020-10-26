@@ -6,7 +6,7 @@
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
-import('classes.article.ArticleDAO');
+import('classes.publication.PublicationDAO');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
@@ -79,7 +79,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
 
 		//instanciando um article para buscar pelo id
-        $ArticleDAO = new ArticleDAO();
+        $PublicationDAO = new PublicationDAO();
 
         for ($i = 0; $i < sizeof($split); $i++) {
 
@@ -87,14 +87,14 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
                 preg_match('#.+view\/([0-9]*)#', $split[$i], $obj);
 
-				$article = $ArticleDAO->getById($obj[1]);
+				$publication = $PublicationDAO->getById($obj[1]);
 				
 				// adicionado if para verificar se DOI existe
-				if(isset($article->_data['pub-id::doi'])){
+				if(isset($publication->_data['pub-id::doi'])){
 
-					if(strlen($article->_data['pub-id::doi']) > 0){
+					if(strlen($publication->_data['pub-id::doi']) > 0){
 						
-						$doiUrl = 'https://doi.org/' . $article->_data['pub-id::doi'];
+						$doiUrl = 'https://doi.org/' . $publication->_data['pub-id::doi'];
 
 						$string = "<div class='doiNoSumario'> <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
 
