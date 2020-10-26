@@ -69,7 +69,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
 
 		// usando expressão regular para pegar todas as divs "title"
-        $split = preg_split('#(<div class="title">.*?</div>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $split = preg_split('#(<h4 class="title">.*?</h4>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
         
         // verificando se as tags "title existem, se não existirem"
         // o $split só retorna no primeiro indice a página completa
