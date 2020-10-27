@@ -67,14 +67,19 @@ class DoiNoSumarioPlugin extends GenericPlugin {
             return $output;
         }
 
-		// usando expressão regular para pegar todas as divs "title"
-        $split = preg_split('#(<h4 class="title">.*?</h4>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
+		// usando expressão regular para pegar todas as classes "title"
         if(strpos($output, '<h4 class="title">')){
             $split = preg_split('#(<h4 class="title">.*?</h4>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
         }
         if(strpos($output, '<h3 class="title">')){
             $split = preg_split('#(<h3 class="title">.*?</h3>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
         }
+        
+        // Adaptar para o tema immersion
+        if(strpos($output, '<h4 class="article__title">')){
+            $split = preg_split('#(<h4 class="article__title">.*?</h4>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
+        }
+        
 
         // verificando se as tags "title existem, se não existirem"
         // o $split só retorna no primeiro indice a página completa
@@ -101,7 +106,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 						
 						$doiUrl = 'https://doi.org/' . $publication->_data['pub-id::doi'];
 
-						$string = "<div class='doiNoSumario'> <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
+						$string = "<div class='doiNoSumario'> DOI: <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
 
 						$split[$i] .= $string;
 					}
