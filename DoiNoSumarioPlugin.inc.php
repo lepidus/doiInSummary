@@ -58,7 +58,6 @@ class DoiNoSumarioPlugin extends GenericPlugin {
                 $templateMgr->registerFilter('output', array($this, 'addDoi'));
             	break;
         }
-
     }
 
     public function addDoi($output, $templateMgr){
