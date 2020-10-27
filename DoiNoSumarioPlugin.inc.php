@@ -70,7 +70,13 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
 		// usando expressão regular para pegar todas as divs "title"
         $split = preg_split('#(<h4 class="title">.*?</h4>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
-        
+        if(strpos($output, '<h4 class="title">')){
+            $split = preg_split('#(<h4 class="title">.*?</h4>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
+        }
+        if(strpos($output, '<h3 class="title">')){
+            $split = preg_split('#(<h3 class="title">.*?</h3>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
+        }
+
         // verificando se as tags "title existem, se não existirem"
         // o $split só retorna no primeiro indice a página completa
         // sem os registros encontrados, ou seja, o vetor ficará com tamanho (1)
