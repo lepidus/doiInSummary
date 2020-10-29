@@ -60,42 +60,47 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
     }
 
+    private function mapearRegex($output){
+        $expressoesRegulares = [
+            '<h4 class="title">' => '#(<h4 class="title">.*?</h4>)#s',
+            '<h3 class="title">' => '#(<h3 class="title">.*?</h3>)#s',
+            '<h4 class="article__title">' =>  '#(<h4 class="article__title">.*?</h4>)#s'
+        ];
+    
+        foreach ($expressoesRegulares as $key => $value) {
+            if (strpos($output, $key) ){
+                return preg_split($value, $output,-1, PREG_SPLIT_DELIM_CAPTURE);
+            }		
+        }
+            
+    }
+
     public function addDoi($output, $templateMgr){
 
 		//verificando se o tpl final corresponde a página totalmente compilada
         if ($templateMgr->source->filepath !== "app:frontendpagesissue.tpl" && $templateMgr->source->filepath !== "app:frontendpagesindexJournal") {
             return $output;
         }
+        
+        // coleta blocos h3 ou h4, no codigo html, de titulos dos artigos 
+        $blocosHTML = $this->mapearRegex($output);
 
-		// usando expressão regular para pegar todas as classes "title"
-        if(strpos($output, '<h4 class="title">')){
-            $split = preg_split('#(<h4 class="title">.*?</h4>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
-        }
-        if(strpos($output, '<h3 class="title">')){
-            $split = preg_split('#(<h3 class="title">.*?</h3>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
-        }
-        
-        // Adaptar para o tema immersion
-        if(strpos($output, '<h4 class="article__title">')){
-            $split = preg_split('#(<h4 class="article__title">.*?</h4>)#s', $output, -1, PREG_SPLIT_DELIM_CAPTURE);
-        }
-        
 
         // verificando se as tags "title existem, se não existirem"
-        // o $split só retorna no primeiro indice a página completa
+        // o $blocosHTML só retorna no primeiro indice a página completa
         // sem os registros encontrados, ou seja, o vetor ficará com tamanho (1)
-        if(sizeof($split) <= 1){
+        if(sizeof($blocosHTML) <= 1){
             return $output;
         }
 
 		//instanciando um article para buscar pelo id
         $PublicationDAO = new PublicationDAO();
 
-        for ($i = 0; $i < sizeof($split); $i++) {
+        for ($i = 0; $i < sizeof($blocosHTML); $i++) {
 
             if ($i % 2 !== 0) {
 
-                preg_match('#.+view\/([0-9]*)#', $split[$i], $obj);
+                preg_match('#.+view\/([0-9]*)#', $blocosHTML[$i], $obj);
 
 				$publication = $PublicationDAO->getById($obj[1]);
 				
@@ -104,22 +109,22 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
 					if(strlen($publication->_data['pub-id::doi']) > 0){
 						
-						$doiUrl = 'https://doi.org/' . $publication->_data['pub-id::doi'];
+                        $doiUrl = 'https://doi.org/' . $publication->_data['pub-id::doi'];
+                        
+						$doiDiv = "<div class='doiNoSumario'> DOI: <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
 
-						$string = "<div class='doiNoSumario'> DOI: <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
-
-						$split[$i] .= $string;
+						$blocosHTML[$i] .= $doiDiv;
 					}
 				}
-
-                $newTpl .= $split[$i];
+                //variavel $newTpl para $novoTpl
+                $novoTpl .= $blocosHTML[$i];
             } else {
-                $newTpl .= $split[$i];   
+                $novoTpl .= $blocosHTML[$i];   
             }
         }
 
         $templateMgr->unregisterFilter('output', array($this, 'addDoi'));
-        return $newTpl;
+        return $novoTpl;
     }
 
 }
