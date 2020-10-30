@@ -55,7 +55,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
             case "frontend/pages/indexJournal.tpl":
             case "frontend/pages/issue.tpl":
                 $templateMgr = $args[0];
-                $templateMgr->registerFilter('output', array($this, 'addDoi'));
+                $templateMgr->registerFilter('output', array($this, 'adicionaDoi'));
             	break;
         }
     }
@@ -72,10 +72,9 @@ class DoiNoSumarioPlugin extends GenericPlugin {
                 return preg_split($value, $output,-1, PREG_SPLIT_DELIM_CAPTURE);
             }		
         }
-            
     }
 
-    public function addDoi($output, $templateMgr){
+    public function adicionaDoi($output, $templateMgr){
 
 		//verificando se o tpl final corresponde a página totalmente compilada
         if ($templateMgr->source->filepath !== "app:frontendpagesissue.tpl" && $templateMgr->source->filepath !== "app:frontendpagesindexJournal") {
@@ -100,16 +99,16 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
             if ($i % 2 !== 0) {
 
-                preg_match('#.+view\/([0-9]*)#', $blocosHTML[$i], $obj);
+                preg_match('#.+view\/([0-9]*)#', $blocosHTML[$i], $objeto);
 
-				$publication = $PublicationDAO->getById($obj[1]);
+				$publicacao = $PublicationDAO->getById($objeto[1]);
 				
 				// adicionado if para verificar se DOI existe
-				if(isset($publication->_data['pub-id::doi'])){
+				if(isset($publicacao->_data['pub-id::doi'])){
 
-					if(strlen($publication->_data['pub-id::doi']) > 0){
+					if(strlen($publicacao->_data['pub-id::doi']) > 0){
 						
-                        $doiUrl = 'https://doi.org/' . $publication->_data['pub-id::doi'];
+                        $doiUrl = 'https://doi.org/' . $publicacao->_data['pub-id::doi'];
                         
 						$doiDiv = "<div class='doiNoSumario'> DOI: <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
 
@@ -123,7 +122,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
             }
         }
 
-        $templateMgr->unregisterFilter('output', array($this, 'addDoi'));
+        $templateMgr->unregisterFilter('output', array($this, 'adicionaDoi'));
         return $novoTpl;
     }
 
