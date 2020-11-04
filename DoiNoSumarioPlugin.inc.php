@@ -7,6 +7,7 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 import('classes.publication.PublicationDAO');
+require_once('Mapeador.php');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
@@ -60,20 +61,6 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
     }
 
-    private function mapearRegex($output){
-        $expressoesRegulares = [
-            '<h4 class="title">' => '#(<h4 class="title">.*?</h4>)#s',
-            '<h3 class="title">' => '#(<h3 class="title">.*?</h3>)#s',
-            '<h4 class="article__title">' =>  '#(<h4 class="article__title">.*?</h4>)#s'
-        ];
-    
-        foreach ($expressoesRegulares as $key => $value) {
-            if (strpos($output, $key) ){
-                return preg_split($value, $output,-1, PREG_SPLIT_DELIM_CAPTURE);
-            }		
-        }
-    }
-
     public function adicionaDoi($output, $templateMgr){
 
 		//verificando se o tpl final corresponde a página totalmente compilada
@@ -81,9 +68,9 @@ class DoiNoSumarioPlugin extends GenericPlugin {
             return $output;
         }
         
+        
         // coleta blocos h3 ou h4, no codigo html, de titulos dos artigos 
-        $blocosHTML = $this->mapearRegex($output);
-
+        $blocosHTML = Mapeador::mapearRegex($output);
 
         // verificando se as tags "title existem, se não existirem"
         // o $blocosHTML só retorna no primeiro indice a página completa
