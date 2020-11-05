@@ -1,12 +1,8 @@
 <?php
 
-/*
-Classe que mapeia o regex de acordo com a existência da chave no html de entrada
-*/
+class TitulosDaPagina{
 
-class Mapeador{
-
-    public function mapearRegex($output){        
+    public function obterTitulos($html){        
         $expressoesRegulares = [
             '<h4 class="title">' => '#(<h4 class="title">.*?</h4>)#s',
             '<h3 class="title">' => '#(<h3 class="title">.*?</h3>)#s',
@@ -14,23 +10,20 @@ class Mapeador{
         ];
     
         foreach ($expressoesRegulares as $key => $value) {
-            if (strpos($output, $key) ){
-                return preg_split($value, $output,-1, PREG_SPLIT_DELIM_CAPTURE);
+            if (strpos($html, $key) ){
+                return preg_split($value, $html,-1, PREG_SPLIT_DELIM_CAPTURE);
             }		
         }
-        // saída padronizada para um vetor teste
-        $htmlSemTitulos[0] = $output;
+        $htmlSemTitulos[0] = $html;
         return $htmlSemTitulos;
     }
 
-    // verifica se a função mapearRegex identificou algum titulo no codigo html
-    public function verificaTitulos($blocosHtml){
+    public function existeTitulos($blocosHtml){
         if(sizeof($blocosHtml) > 1 ){
             return true;
         }
         return false;
     }
-
-        
+     
 }
 

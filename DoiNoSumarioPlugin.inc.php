@@ -7,7 +7,7 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 import('classes.publication.PublicationDAO');
-require_once('Mapeador.php');
+require_once('TitulosDaPagina.php');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
@@ -68,9 +68,10 @@ class DoiNoSumarioPlugin extends GenericPlugin {
             return $output;
         }
         
-        
+        $TitulosDaPagina = new TitulosDaPagina();
+
         // coleta blocos h3 ou h4, no codigo html, de titulos dos artigos 
-        $blocosHTML = Mapeador::mapearRegex($output);
+        $blocosHTML = $TitulosDaPagina->obterTitulos($output);
 
         // verificando se as tags "title existem, se não existirem"
         // o $blocosHTML só retorna no primeiro indice a página completa
