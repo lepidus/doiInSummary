@@ -81,23 +81,22 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
 
 		//instanciando um article para buscar pelo id
-        $PublicationDAO = new PublicationDAO();
+        $SubmissionDAO = new SubmissionDAO();
 
         for ($i = 0; $i < sizeof($blocosHTML); $i++) {
-
+            
             if ($i % 2 !== 0) {
-
                 preg_match('#.+view\/([0-9]*)#', $blocosHTML[$i], $objeto);
+            
+                $submissao = $SubmissionDAO->getById($objeto[1]);
+                $publicacao = $submissao->getCurrentPublication();
 
-				$publicacao = $PublicationDAO->getById($objeto[1]);
-				
 				// adicionado if para verificar se DOI existe
 				if(isset($publicacao->_data['pub-id::doi'])){
-
 					if(strlen($publicacao->_data['pub-id::doi']) > 0){
 						
                         $doiUrl = 'https://doi.org/' . $publicacao->_data['pub-id::doi'];
-                        
+                                    
 						$doiDiv = "<div class='doiNoSumario'> DOI: <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
 
 						$blocosHTML[$i] .= $doiDiv;
