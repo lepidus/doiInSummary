@@ -19,8 +19,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
         if($this->getEnabled($mainContextId)){
             HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
-        
-            //adicionando idiomas para o plugin
+    
             $this->addLocaleData();
 
             $request = Application::getRequest();
@@ -63,25 +62,17 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
     public function adicionaDoi($output, $templateMgr){
 
-		//verificando se o tpl final corresponde a página totalmente compilada
-        if ($templateMgr->source->filepath !== "app:frontendpagesissue.tpl" && $templateMgr->source->filepath !== "app:frontendpagesindexJournal") {
+		if ($templateMgr->source->filepath !== "app:frontendpagesissue.tpl" && $templateMgr->source->filepath !== "app:frontendpagesindexJournal") {
             return $output;
         }
         
-        $TitulosDaPagina = new TitulosDaPagina();
-
-        // coleta blocos h3 ou h4, no codigo html, de titulos dos artigos 
+        $SubmissionDAO = new SubmissionDAO();
+        $TitulosDaPagina = new TitulosDaPagina(); 
         $blocosHTML = $TitulosDaPagina->obterTitulos($output);
 
-        // verificando se as tags "title existem, se não existirem"
-        // o $blocosHTML só retorna no primeiro indice a página completa
-        // sem os registros encontrados, ou seja, o vetor ficará com tamanho (1)
         if(sizeof($blocosHTML) <= 1){
             return $output;
         }
-
-		//instanciando um article para buscar pelo id
-        $SubmissionDAO = new SubmissionDAO();
 
         for ($i = 0; $i < sizeof($blocosHTML); $i++) {
             
@@ -91,7 +82,6 @@ class DoiNoSumarioPlugin extends GenericPlugin {
                 $submissao = $SubmissionDAO->getById($objeto[1]);
                 $publicacao = $submissao->getCurrentPublication();
 
-				// adicionado if para verificar se DOI existe
 				if(isset($publicacao->_data['pub-id::doi'])){
 					if(strlen($publicacao->_data['pub-id::doi']) > 0){
 						
@@ -102,7 +92,6 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 						$blocosHTML[$i] .= $doiDiv;
 					}
 				}
-                //variavel $newTpl para $novoTpl
                 $novoTpl .= $blocosHTML[$i];
             } else {
                 $novoTpl .= $blocosHTML[$i];   
