@@ -2,11 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 
-require_once('tests/TestDados.php');
-require_once('TitulosDaPagina.php');
+require_once('tests/TestDados.inc.php');
+require_once('TitulosDaPagina.inc.php');
 
 
-class TestDoiNoSumarioPlugin extends TestCase{
+class TestTitulosDaPagina extends TestCase{
     
     public function testExisteHtmlComTagH3TemaPadrao(): void{
         

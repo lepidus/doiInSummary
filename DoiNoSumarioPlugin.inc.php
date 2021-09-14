@@ -77,9 +77,9 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         for ($i = 0; $i < sizeof($blocosHTML); $i++) {
             
             if ($i % 2 !== 0) {
-                preg_match('#.+view\/([0-9]*)#', $blocosHTML[$i], $objeto);
+                $idDaSubmissao = $this->recuperaIdDaSubmissao($blocosHTML[$i]);
             
-                $submissao = $SubmissionDAO->getById($objeto[1]);
+                $submissao = $SubmissionDAO->getById($idDaSubmissao);
                 $publicacao = $submissao->getCurrentPublication();
 
 				if(isset($publicacao->_data['pub-id::doi'])){
@@ -100,6 +100,20 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
         $templateMgr->unregisterFilter('output', array($this, 'adicionaDoi'));
         return $novoTpl;
+    }
+
+    public function recuperaIdDaSubmissao($blocoHTML){
+
+        preg_match('#.+view\/([0-9]*)#', $blocoHTML, $resultado); 
+
+        $idDaSubmissao = $resultado[1];
+
+        if (empty($idDaSubmissao)){
+            preg_match('#.+view\/e([0-9]*)#', $blocoHTML, $resultado); 
+            $idDaSubmissao = $resultado[1];
+        }
+
+        return $idDaSubmissao;
     }
 
 }
