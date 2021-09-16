@@ -7,7 +7,7 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 import('classes.publication.PublicationDAO');
-require_once('TitulosDaPagina.php');
+import('plugins.generic.doiNoSumario.classes.TitulosDaPagina');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
