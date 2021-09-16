@@ -2,8 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 
-require_once('tests/TestDados.inc.php');
-require_once('classes/TitulosDaPagina.inc.php');
+import('plugins.generic.doiNoSumario.tests.TestDados');
+import('plugins.generic.doiNoSumario.classes.TitulosDaPagina');
 
 
 class TitulosDaPaginaTest extends TestCase{
