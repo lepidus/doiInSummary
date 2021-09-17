@@ -43,6 +43,7 @@ class TestDados{
 	                </div>
                 </body> </html>';
     }
+
     public function htmlImmersionComIdDaSumissao(){
         return '<!DOCTYPE html> <html> <head> <title></title> </head> 
                 <body> 
@@ -54,5 +55,21 @@ class TestDados{
                         </h4>
                     </div>
                 </body> </html>';
+    }
+
+    public function tituloHtmlPadraoH3ComIdDaSumissao(){
+        return '<h3 class="title">
+                    <a id="article-10818" href="http://localhost:8080/index.php/rca/article/view/e10818">
+                        Diferentes Tipos de Reprodução Musical e sua Influência sobre o Tempo de Permanência dos Clientes em Restaurantes
+                    </a>
+                </h3>';
+    }
+
+    public function tituloHtmlPadraoH3ComIdDaSumissaoComDOI(){
+        return '<h3 class="title">
+                    <a id="article-10818" href="http://localhost:8080/index.php/rca/article/view/e10818">
+                        Diferentes Tipos de Reprodução Musical e sua Influência sobre o Tempo de Permanência dos Clientes em Restaurantes
+                    </a>
+                </h3><div class=\'doiNoSumario\'> DOI: <a href=\'https://doi.org/10.5020/2318-0722.2021.27.1.11439\'>https://doi.org/10.5020/2318-0722.2021.27.1.11439 </a> </div>';
     }
 }

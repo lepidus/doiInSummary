@@ -3,6 +3,16 @@
 import('plugins.generic.doiNoSumario.classes.TitulosDaPagina');
 
 class InterpretadorDeDOINoSumario{
+
+    private $blocosHTMLComTituloEIdsDasSubmissoes;
+
+    public function __construct(){
+        $this->blocosHTMLComTituloEIdsDasSubmissoes = [];
+    }
+
+    public function setBlocosHTMLComTituloEIdsDasSubmissoes($HTMLComTituloEIdsDasSubmissoes){
+        $this->blocosHTMLComTituloEIdsDasSubmissoes = $HTMLComTituloEIdsDasSubmissoes;
+    }
     
     public function obterIdDaSubmissao($htlm) : array {       
 
@@ -13,15 +23,36 @@ class InterpretadorDeDOINoSumario{
             return $htlm;
         }
         
-        $idDaSubmissao = [];
+        $idsDasSubmissoes = [];
         
         for ($indice = 0; $indice < sizeof($blocosHTMLComTitulo); $indice++) {
             if ($indice % 2 == 1) {
                 preg_match('#.+view\/e*([0-9]*)#', $blocosHTMLComTitulo[$indice], $resultado);
-                $idDaSubmissao[] = $resultado[1];
+                $idDaSubmissao = $resultado[1];
+                $idsDasSubmissoes[] = $idDaSubmissao;
+                $blocosHTMLComTituloEIdsDasSubmissoes[$idDaSubmissao] = $blocosHTMLComTitulo[$indice];
             }
         }
-        return $idDaSubmissao;
+        return $idsDasSubmissoes;
+    }
+
+    public function renderizarDoiNoSumario($publicacao) : string{
+        
+        $idDaSubmissao = $publicacao->_data['submissionId'];
+        $blocoHTMLComTitulo = $this->blocosHTMLComTituloEIdsDasSubmissoes[$idDaSubmissao];
+
+        if(isset($publicacao->_data['pub-id::doi'])){
+            if(strlen($publicacao->_data['pub-id::doi']) > 0){
+                
+                $doiUrl = 'https://doi.org/' . $publicacao->_data['pub-id::doi'];
+                            
+                $doiDiv = "<div class='doiNoSumario'> DOI: <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
+
+                return $blocoHTMLComTitulo . $doiDiv;
+            }
+        }
+
+        return $blocoHTMLComTitulo;
     }
 
 }
