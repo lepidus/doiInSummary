@@ -106,7 +106,7 @@ class InterpretadorDeDOINoSumarioTest extends TestCase{
 
     public function criacaoDoInterpretadorERenderizacao($blocoHTMLComIdDaSubmissao,$publication){
         $InterpretadorDeDOINoSumario = new InterpretadorDeDOINoSumario();
-        $InterpretadorDeDOINoSumario->setBlocosHTMLComTituloEIdsDasSubmissoes($blocoHTMLComIdDaSubmissao);
+        $InterpretadorDeDOINoSumario->defineBlocosHTMLComTituloEIdsDasSubmissoes($blocoHTMLComIdDaSubmissao);
         
         return $InterpretadorDeDOINoSumario->renderizarDoiNoSumario($publication);
     }

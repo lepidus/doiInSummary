@@ -7,7 +7,7 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 import('classes.publication.PublicationDAO');
-import('plugins.generic.doiNoSumario.classes.TitulosDaPagina');
+import('plugins.generic.doiNoSumario.classes.InterpretadorDeDOINoSumario');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
@@ -65,55 +65,51 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 		if ($templateMgr->source->filepath !== "app:frontendpagesissue.tpl" && $templateMgr->source->filepath !== "app:frontendpagesindexJournal") {
             return $output;
         }
-        
-        $SubmissionDAO = new SubmissionDAO();
-        $TitulosDaPagina = new TitulosDaPagina(); 
-        $blocosHTML = $TitulosDaPagina->obterTitulos($output);
 
-        if(sizeof($blocosHTML) <= 1){
+        $InterpretadorDeDOINoSumario = new InterpretadorDeDOINoSumario();
+        $idsDasSubmissoes = $InterpretadorDeDOINoSumario->obterIdDaSubmissao($output);
+
+        if (empty($idsDasSubmissoes)){
             return $output;
         }
-
-        for ($i = 0; $i < sizeof($blocosHTML); $i++) {
-            
-            if ($i % 2 !== 0) {
-                $idDaSubmissao = $this->recuperaIdDaSubmissao($blocosHTML[$i]);
-            
-                $submissao = $SubmissionDAO->getById($idDaSubmissao);
+        else{
+            foreach ($idsDasSubmissoes as $idDaSubmissao) {
+                $SubmissionDAO = new SubmissionDAO();
+				$submissao = $SubmissionDAO->getById($idDaSubmissao);
                 $publicacao = $submissao->getCurrentPublication();
+                $DIVdaPublicacaoComDOI = $InterpretadorDeDOINoSumario->renderizarDoiNoSumario($publicacao);
 
-				if(isset($publicacao->_data['pub-id::doi'])){
-					if(strlen($publicacao->_data['pub-id::doi']) > 0){
-						
-                        $doiUrl = 'https://doi.org/' . $publicacao->_data['pub-id::doi'];
-                                    
-						$doiDiv = "<div class='doiNoSumario'> DOI: <a href='" . $doiUrl . "'>" . $doiUrl . " </a> </div>";
+                $BlocoHTMLComTitulo = $InterpretadorDeDOINoSumario->recuperaBlocoHTMLComTituloAPatirDoIdDaSubmissao($idDaSubmissao);
 
-						$blocosHTML[$i] .= $doiDiv;
-					}
-				}
-                $novoTpl .= $blocosHTML[$i];
-            } else {
-                $novoTpl .= $blocosHTML[$i];   
-            }
+                $output = $this->substituiHtml($BlocoHTMLComTitulo,$DIVdaPublicacaoComDOI,$output);
+			}
         }
 
-        $templateMgr->unregisterFilter('output', array($this, 'adicionaDoi'));
-        return $novoTpl;
+        return $output;
     }
 
-    public function recuperaIdDaSubmissao($blocoHTML){
+    public function substituiHtml($BlocoHTMLComTitulo,$DIVdaPublicacaoComDOI,$output){
 
-        preg_match('#.+view\/([0-9]*)#', $blocoHTML, $resultado); 
+        $regex = "'".$BlocoHTMLComTitulo."'";
+        $regex = str_replace("(","\(",$regex);
+        $regex = str_replace(")","\)",$regex);
+        $regex = str_replace("?","\?",$regex);
+        $regex = str_replace(".","\.",$regex);
+        $regex = str_replace("^","\^",$regex);
+        $regex = str_replace("$","\$",$regex);
+        $regex = str_replace("*","\*",$regex);
+        $regex = str_replace("+","\+",$regex);
+        $regex = str_replace("-","\-",$regex);
+        $regex = str_replace("[","\[",$regex);
+        $regex = str_replace("]","\]",$regex);
+        $regex = str_replace("{","\{",$regex);
+        $regex = str_replace("}","\}",$regex);
+        $regex = str_replace("|","\|",$regex);
+        $regex = str_replace("—","\—",$regex);
+        $regex = str_replace("/","\/",$regex);
+        //$regex = str_replace('\','\\',$regex);
 
-        $idDaSubmissao = $resultado[1];
+        return preg_replace($regex,$DIVdaPublicacaoComDOI,$output);
 
-        if (empty($idDaSubmissao)){
-            preg_match('#.+view\/e([0-9]*)#', $blocoHTML, $resultado); 
-            $idDaSubmissao = $resultado[1];
-        }
-
-        return $idDaSubmissao;
     }
-
 }

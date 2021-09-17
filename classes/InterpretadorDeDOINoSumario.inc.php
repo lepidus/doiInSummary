@@ -10,8 +10,12 @@ class InterpretadorDeDOINoSumario{
         $this->blocosHTMLComTituloEIdsDasSubmissoes = [];
     }
 
-    public function setBlocosHTMLComTituloEIdsDasSubmissoes($HTMLComTituloEIdsDasSubmissoes){
+    public function defineBlocosHTMLComTituloEIdsDasSubmissoes($HTMLComTituloEIdsDasSubmissoes){
         $this->blocosHTMLComTituloEIdsDasSubmissoes = $HTMLComTituloEIdsDasSubmissoes;
+    }
+
+    public function recuperaBlocoHTMLComTituloAPatirDoIdDaSubmissao($idDaSubmissao){
+        return $this->blocosHTMLComTituloEIdsDasSubmissoes[$idDaSubmissao];
     }
     
     public function obterIdDaSubmissao($htlm) : array {       
@@ -30,7 +34,7 @@ class InterpretadorDeDOINoSumario{
                 preg_match('#.+view\/e*([0-9]*)#', $blocosHTMLComTitulo[$indice], $resultado);
                 $idDaSubmissao = $resultado[1];
                 $idsDasSubmissoes[] = $idDaSubmissao;
-                $blocosHTMLComTituloEIdsDasSubmissoes[$idDaSubmissao] = $blocosHTMLComTitulo[$indice];
+                $this->blocosHTMLComTituloEIdsDasSubmissoes[$idDaSubmissao] = $blocosHTMLComTitulo[$indice];
             }
         }
         return $idsDasSubmissoes;

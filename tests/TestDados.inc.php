@@ -60,7 +60,7 @@ class TestDados{
     public function tituloHtmlPadraoH3ComIdDaSumissao(){
         return '<h3 class="title">
                     <a id="article-10818" href="http://localhost:8080/index.php/rca/article/view/e10818">
-                        Diferentes Tipos de Reprodução Musical e sua Influência sobre o Tempo de Permanência dos Clientes em Restaurantes
+                    Legítima e liberdade testamentária no direito civil contemporâneo: entre a autonomia e a solidariedade
                     </a>
                 </h3>';
     }
@@ -68,8 +68,24 @@ class TestDados{
     public function tituloHtmlPadraoH3ComIdDaSumissaoComDOI(){
         return '<h3 class="title">
                     <a id="article-10818" href="http://localhost:8080/index.php/rca/article/view/e10818">
-                        Diferentes Tipos de Reprodução Musical e sua Influência sobre o Tempo de Permanência dos Clientes em Restaurantes
+                    Legítima e liberdade testamentária no direito civil contemporâneo: entre a autonomia e a solidariedade
                     </a>
                 </h3><div class=\'doiNoSumario\'> DOI: <a href=\'https://doi.org/10.5020/2318-0722.2021.27.1.11439\'>https://doi.org/10.5020/2318-0722.2021.27.1.11439 </a> </div>';
+    }
+
+    public function tituloHtmlPadraoH4ComIdDaSumissao(){
+        return '<h4 class="title">
+                    <a id="article-11443" href="http://localhost:8080/index.php/rpen/article/view/11443">
+                        [Análise] {jurisprudencial} dos . tribunais | da região ^ sudeste — sobre $ a -aplicação * do + instituto:  (síndrome da) alienação parental?
+                    </a>
+                 </h4>';
+    }
+
+    public function tituloHtmlPadraoH4ComIdDaSumissaoComDOI(){
+        return '<h4 class="title">
+                    <a id="article-11443" href="http://localhost:8080/index.php/rpen/article/view/11443">
+                        [Análise] {jurisprudencial} dos . tribunais | da região ^ sudeste — sobre $ a -aplicação * do + instituto:  (síndrome da) alienação parental?
+                    </a>
+                 </h4><div class=\'doiNoSumario\'> DOI: <a href=\'http://localhost:8080/index.php/rpen/article/view/11443\'>http://localhost:8080/index.php/rpen/article/view/11443 </a> </div>';
     }
 }
