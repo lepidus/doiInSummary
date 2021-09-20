@@ -76,7 +76,7 @@ class TestDados{
     public function tituloHtmlPadraoH4ComIdDaSumissao(){
         return '<h4 class="title">
                     <a id="article-11443" href="http://localhost:8080/index.php/rpen/article/view/11443">
-                        [Análise] {jurisprudencial} dos . tribunais | da região ^ sudeste — sobre $ a -aplicação * do + instituto:  (síndrome da) alienação parental?
+                        [Análise] {jurisprudencial} dos ^ tribunais | da $ região * deste + sobre - a . aplicação — do / instituto:  (síndrome da) alienação \ parental?
                     </a>
                  </h4>';
     }
@@ -84,7 +84,7 @@ class TestDados{
     public function tituloHtmlPadraoH4ComIdDaSumissaoComDOI(){
         return '<h4 class="title">
                     <a id="article-11443" href="http://localhost:8080/index.php/rpen/article/view/11443">
-                        [Análise] {jurisprudencial} dos . tribunais | da região ^ sudeste — sobre $ a -aplicação * do + instituto:  (síndrome da) alienação parental?
+                        [Análise] {jurisprudencial} dos ^ tribunais | da $ região * deste + sobre - a . aplicação — do / instituto:  (síndrome da) alienação \ parental?
                     </a>
                  </h4><div class=\'doiNoSumario\'> DOI: <a href=\'http://localhost:8080/index.php/rpen/article/view/11443\'>http://localhost:8080/index.php/rpen/article/view/11443 </a> </div>';
     }

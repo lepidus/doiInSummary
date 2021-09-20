@@ -91,23 +91,12 @@ class DoiNoSumarioPlugin extends GenericPlugin {
     public function substituiHtml($BlocoHTMLComTitulo,$DIVdaPublicacaoComDOI,$output){
 
         $regex = "'".$BlocoHTMLComTitulo."'";
-        $regex = str_replace("(","\(",$regex);
-        $regex = str_replace(")","\)",$regex);
-        $regex = str_replace("?","\?",$regex);
-        $regex = str_replace(".","\.",$regex);
-        $regex = str_replace("^","\^",$regex);
-        $regex = str_replace("$","\$",$regex);
-        $regex = str_replace("*","\*",$regex);
-        $regex = str_replace("+","\+",$regex);
-        $regex = str_replace("-","\-",$regex);
-        $regex = str_replace("[","\[",$regex);
-        $regex = str_replace("]","\]",$regex);
-        $regex = str_replace("{","\{",$regex);
-        $regex = str_replace("}","\}",$regex);
-        $regex = str_replace("|","\|",$regex);
-        $regex = str_replace("—","\—",$regex);
-        $regex = str_replace("/","\/",$regex);
-        //$regex = str_replace('\','\\',$regex);
+
+        $regex = addslashes($regex);
+        $regex = str_replace("\'","'",$regex);
+        $regex = str_replace('\"','"',$regex); 
+
+        $regex = addcslashes($regex, '(,),?,[,],{,},|,^,$,*,+,-,.,—,/');
 
         return preg_replace($regex,$DIVdaPublicacaoComDOI,$output);
 
