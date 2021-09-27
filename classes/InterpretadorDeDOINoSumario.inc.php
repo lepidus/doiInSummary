@@ -18,13 +18,13 @@ class InterpretadorDeDOINoSumario{
         return $this->blocosHTMLComTituloEIdsDasSubmissoes[$idDaSubmissao];
     }
     
-    public function obterIdDaSubmissao($htlm) : array {       
+    public function obterIdDaSubmissao($html) : ?array {       
 
         $TitulosDaPagina = new TitulosDaPagina(); 
-        $blocosHTMLComTitulo = $TitulosDaPagina->obterTitulos($htlm);
+        $blocosHTMLComTitulo = $TitulosDaPagina->obterTitulos($html);
         
         if(sizeof($blocosHTMLComTitulo) <= 1){
-            return $htlm;
+            return null;
         }
         
         $idsDasSubmissoes = [];
