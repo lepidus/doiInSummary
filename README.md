@@ -7,13 +7,13 @@ __Copyright (c) Lepidus Tecnologia__
 
 # Primeiros passos
 
-## Pré-requisitos
-* OJS 3.1.2-1 ;
-* Possuir tema: __Tema Padrão__;
-
 ## Download do Plugin
 
-* {Aqui ficará o link de Download para Release}
+* [v1.1.3](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.3)
+* [v1.1.2](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.2)
+* [v1.1.1](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.1)
+* [v1.1.0](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.0)
+
 
 ## Instalação
 1. Entre na área de administração do seu site OJS pelo __Painel de Controle__.
