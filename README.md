@@ -9,6 +9,7 @@ __Copyright (c) Lepidus Tecnologia__
 
 ## Download do Plugin
 
+* [v1.1.4](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.4)
 * [v1.1.3](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.3)
 * [v1.1.2](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.2)
 * [v1.1.1](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.1)
