@@ -90,13 +90,15 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
     public function substituiHtml($BlocoHTMLComTitulo,$DIVdaPublicacaoComDOI,$output){
 
-        $regex = "'".$BlocoHTMLComTitulo."'";
+        $regex = $BlocoHTMLComTitulo;
 
         $regex = addslashes($regex);
         $regex = str_replace("\'","'",$regex);
         $regex = str_replace('\"','"',$regex); 
 
-        $regex = addcslashes($regex, '(,),?,[,],{,},|,^,$,*,+,-,.,—,/');
+        $regex = addcslashes($regex, '(,),?,[,],{,},|,^,$,*,+,-,.,—,/,\'');
+
+        $regex = "'".$regex."'";
 
         return preg_replace($regex,$DIVdaPublicacaoComDOI,$output);
 
