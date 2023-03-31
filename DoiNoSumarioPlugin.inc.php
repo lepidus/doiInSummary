@@ -56,7 +56,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
             case "frontend/pages/issue.tpl":
                 $templateMgr = $args[0];
                 $templateMgr->registerFilter('output', array($this, 'adicionaDoi'));
-            	break;
+                break;
         }
     }
 
@@ -76,6 +76,11 @@ class DoiNoSumarioPlugin extends GenericPlugin {
             foreach ($idsDasSubmissoes as $idDaSubmissao) {
                 $SubmissionDAO = new SubmissionDAO();
 				$submissao = $SubmissionDAO->getById($idDaSubmissao);
+                if(empty($submissao)) {
+                    error_log("Submissão inexistente: $idDaSubmissao");
+                    continue;
+                }
+                
                 $publicacao = $submissao->getCurrentPublication();
                 $DIVdaPublicacaoComDOI = $InterpretadorDeDOINoSumario->renderizarDoiNoSumario($publicacao);
 
