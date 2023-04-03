@@ -6,8 +6,6 @@
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
-import('classes.publication.PublicationDAO');
-import('plugins.generic.doiNoSumario.classes.InterpretadorDeDOINoSumario');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
@@ -18,7 +16,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
 
         if($this->getEnabled($mainContextId)){
-            HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
+            HookRegistry::register('Templates::Issue::Issue::Article', array($this, 'addDoiToArticleSummary'));
     
             $this->addLocaleData();
 
@@ -29,6 +27,30 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
 
         return true;
+    }
+
+    public function addDoiToArticleSummary($hookName, $args)
+    {
+        $templateMgr =& $args[1];
+		$output =& $args[2];
+
+        $submission = $templateMgr->getVariable('article')->value;
+        $doiUrl = $this->getArticleDoiUrl($submission);
+        
+        if(!is_null($doiUrl)) {
+            $templateMgr->assign('doiUrl', $doiUrl);
+            $output .= $templateMgr->fetch($this->getTemplateResource('doi_summary.tpl'));
+        }
+    }
+
+    private function getArticleDoiUrl($article): ?string
+    {
+        $publication = $article->getCurrentPublication();
+        $doi = $publication->getData('pub-id::doi');
+        
+        if(empty($doi)) return null;
+
+        return "https://doi.org/$doi";
     }
 
     public function getDisplayName(){
