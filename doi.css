@@ -11,8 +11,3 @@
 .doiNoSumario span{
     font-weight: bolder;
 }
-.obj_article_summary{
-  display: flex;
-  flex-direction: column;
-}
-.obj_article_summary :nth-child(2) { order: 1; }
