@@ -6,8 +6,6 @@
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
-import('classes.publication.PublicationDAO');
-import('plugins.generic.doiNoSumario.classes.InterpretadorDeDOINoSumario');
 
 class DoiNoSumarioPlugin extends GenericPlugin {
 
@@ -18,7 +16,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
 
         if($this->getEnabled($mainContextId)){
-            HookRegistry::register('TemplateManager::display', array($this, 'templateManagerCallback'));
+            HookRegistry::register('Templates::Issue::Issue::Article', array($this, 'addDoiToArticleSummary'));
     
             $this->addLocaleData();
 
@@ -29,6 +27,30 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         }
 
         return true;
+    }
+
+    public function addDoiToArticleSummary($hookName, $args)
+    {
+        $templateMgr =& $args[1];
+		$output =& $args[2];
+
+        $submission = $templateMgr->getVariable('article')->value;
+        $doiUrl = $this->getArticleDoiUrl($submission);
+        
+        if(!is_null($doiUrl)) {
+            $templateMgr->assign('doiUrl', $doiUrl);
+            $output .= $templateMgr->fetch($this->getTemplateResource('doi_summary.tpl'));
+        }
+    }
+
+    private function getArticleDoiUrl($article): ?string
+    {
+        $publication = $article->getCurrentPublication();
+        $doi = $publication->getData('pub-id::doi');
+        
+        if(empty($doi)) return null;
+
+        return "https://doi.org/$doi";
     }
 
     public function getDisplayName(){
@@ -47,60 +69,5 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
     public function getInstallSitePluginSettingsFile(){
         return $this->getPluginPath() . '/settings.xml';
-    }
-
-    public function templateManagerCallback($hookName, $args){
-
-        switch ($args[1]) {
-            case "frontend/pages/indexJournal.tpl":
-            case "frontend/pages/issue.tpl":
-                $templateMgr = $args[0];
-                $templateMgr->registerFilter('output', array($this, 'adicionaDoi'));
-            	break;
-        }
-    }
-
-    public function adicionaDoi($output, $templateMgr){
-
-		if ($templateMgr->source->filepath !== "app:frontendpagesissue.tpl" && $templateMgr->source->filepath !== "app:frontendpagesindexJournal") {
-            return $output;
-        }
-
-        $InterpretadorDeDOINoSumario = new InterpretadorDeDOINoSumario();
-        $idsDasSubmissoes = $InterpretadorDeDOINoSumario->obterIdDaSubmissao($output);
-
-        if (empty($idsDasSubmissoes)){
-            return $output;
-        }
-        else{
-            foreach ($idsDasSubmissoes as $idDaSubmissao) {
-                $SubmissionDAO = new SubmissionDAO();
-				$submissao = $SubmissionDAO->getById($idDaSubmissao);
-                $publicacao = $submissao->getCurrentPublication();
-                $DIVdaPublicacaoComDOI = $InterpretadorDeDOINoSumario->renderizarDoiNoSumario($publicacao);
-
-                $BlocoHTMLComTitulo = $InterpretadorDeDOINoSumario->recuperaBlocoHTMLComTituloAPatirDoIdDaSubmissao($idDaSubmissao);
-
-                $output = $this->substituiHtml($BlocoHTMLComTitulo,$DIVdaPublicacaoComDOI,$output);
-			}
-        }
-
-        return $output;
-    }
-
-    public function substituiHtml($BlocoHTMLComTitulo,$DIVdaPublicacaoComDOI,$output){
-
-        $regex = $BlocoHTMLComTitulo;
-
-        $regex = addslashes($regex);
-        $regex = str_replace("\'","'",$regex);
-        $regex = str_replace('\"','"',$regex); 
-
-        $regex = addcslashes($regex, '(,),?,[,],{,},|,^,$,*,+,-,.,—,/,\'');
-
-        $regex = "'".$regex."'";
-
-        return preg_replace($regex,$DIVdaPublicacaoComDOI,$output);
-
     }
 }
