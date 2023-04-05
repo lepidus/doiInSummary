@@ -8,17 +8,21 @@
         referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
     {rdelim}
     
-    const doiDiv = document.getElementById('doi_article-{$article->getId()}');
-    const articleSummary = doiDiv.parentNode;
-    const titlesDefault = articleSummary.getElementsByClassName('title');
-    const titlesImmersion = articleSummary.getElementsByClassName('article__title');
+    function updateDoiPosition(){ldelim}
+        const doiDiv = document.getElementById('doi_article-{$article->getId()}');
+        const articleSummary = doiDiv.parentNode;
+        const titlesDefault = articleSummary.getElementsByClassName('title');
+        const titlesImmersion = articleSummary.getElementsByClassName('article__title');
 
-    if(titlesDefault.length > 0) {ldelim}
-        let title = titlesDefault[0];
-        insertAfter(doiDiv, title);
+        if(titlesDefault.length > 0) {ldelim}
+            let title = titlesDefault[0];
+            insertAfter(doiDiv, title);
+        {rdelim}
+        else if(titlesImmersion.length > 0) {ldelim}
+            let title = titlesImmersion[0];
+            insertAfter(doiDiv, title);
+        {rdelim}
     {rdelim}
-    else if(titlesImmersion.length > 0) {ldelim}
-        let title = titlesImmersion[0];
-        insertAfter(doiDiv, title);
-    {rdelim}
+    
+    updateDoiPosition();
 </script>

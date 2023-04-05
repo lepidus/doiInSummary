@@ -34,7 +34,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
         $templateMgr =& $args[1];
 		$output =& $args[2];
 
-        $submission = $templateMgr->getVariable('article')->value;
+        $submission = $templateMgr->getTemplateVars('article');
         $doiUrl = $this->getArticleDoiUrl($submission);
         
         if(!is_null($doiUrl)) {
