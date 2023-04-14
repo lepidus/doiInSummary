@@ -32,7 +32,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
     public function addDoiToArticleSummary($hookName, $args)
     {
         $templateMgr =& $args[1];
-		$output =& $args[2];
+        $output =& $args[2];
 
         $submission = $templateMgr->getTemplateVars('article');
         $doiUrl = $this->getArticleDoiUrl($submission);
