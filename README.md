@@ -1,32 +1,22 @@
-# Doi no Sumário 
+# DOI in Summary 
 
-Este plugin foi construído com o propósito de facilitar a visualização do DOI (Identificador de Objeto Digital) no sumário das edições de uma revista.
+This plugin was built with the purpose of facilitating the visualization of the DOI (Digital Object Identifier) in the summary of the issues of a journal.
 
-__Copyright (c) Lepidus Tecnologia__ 
+# Compatibility
 
+The latest release of this plugin is compatible with the following PKP applications:
 
-# Primeiros passos
+* OJS 3.3.0
 
-## Download do Plugin
+# Installation
 
-* [v1.1.4](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.4)
-* [v1.1.3](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.3)
-* [v1.1.2](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.2)
-* [v1.1.1](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.1)
-* [v1.1.0](https://gitlab.lepidus.com.br/softwares-pkp/plugins_ojs/doiNoSumario/-/releases/v1.1.0)
+1. Enter the administration area of ​​your OJS/OPS website through the __Dashboard__.
+2. Navigate to `Settings`>` Website`> `Plugins`> `Upload a new plugin`.
+3. Under __Upload file__ select the file __doiInSummary.tar.gz__.
+4. Click __Save__ and the plugin will be installed on your website.
 
+# License
 
-## Instalação
-1. Entre na área de administração do seu site OJS pelo __Painel de Controle__.
-2. Navegue até o `Configurações` > `Website` > `Plugins` > `Enviar novo plugin`.
-3. Em __Enviar arquivo__ selecione o arquivo __doiNoSumario.tar.gz__.
-4. Clique em __Salvar__ e o plugin já estará instalado no seu OJS.
+__This plugin is licensed under the GNU General Public License v2__
 
-# Tecnologias Utilizadas
-* PHP 7.2.19
-* Smarty 3.1.32
-* MySql 15.1 | MariaDB 10.1
-
-# Licença
-__Este plugin está licenciado sob a GNU General Public License v2__
-
+__Copyright (c) 2015-2023 Lepidus Tecnologia__

@@ -1,12 +1,10 @@
 <?php
 
 /**
- * Copyright (c) 20015 Lepidus Tecnologia
+ * Copyright (c) 2015-2023 Lepidus Tecnologia
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  */
 
-require_once('DoiNoSumarioPlugin.inc.php');
+require_once('DoiInSummaryPlugin.inc.php');
 
-return new DoiNoSumarioPlugin();
-
-?>
+return new DoiInSummaryPlugin();

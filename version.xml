@@ -2,15 +2,15 @@
 <!DOCTYPE version SYSTEM "../../../lib/pkp/dtd/pluginVersion.dtd">
 
 <!--
-  * Copyright (c) 2015 Lepidus Tecnologia
+  * Copyright (c) 2015-2023 Lepidus Tecnologia
   * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
-  -->
+-->
 
 <version>
-	<application>doiNoSumario</application>
+	<application>doiInSummary</application>
 	<type>plugins.generic</type>
 	<release>1.2.1.0</release>
 	<date>2023-04-05</date>
 	<lazy-load>0</lazy-load>
-	<class>DoiNoSumarioPlugin</class>
+	<class>DoiInSummaryPlugin</class>
 </version>

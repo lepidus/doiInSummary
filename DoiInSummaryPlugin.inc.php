@@ -1,23 +1,24 @@
 <?php
 
 /**
- * Copyright (c) 2015 Lepidus Tecnologia
+ * Copyright (c) 2015-2023 Lepidus Tecnologia
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
-class DoiNoSumarioPlugin extends GenericPlugin {
-
-    public function register($category, $path, $mainContextId = null){
+class DoiInSummaryPlugin extends GenericPlugin
+{
+    public function register($category, $path, $mainContextId = null)
+    {
 
         if (!parent::register($category, $path, $mainContextId)) {
             return false;
         }
 
-        if($this->getEnabled($mainContextId)){
+        if($this->getEnabled($mainContextId)) {
             HookRegistry::register('Templates::Issue::Issue::Article', array($this, 'addDoiToArticleSummary'));
-    
+
             $this->addLocaleData();
 
             $request = Application::getRequest();
@@ -36,7 +37,7 @@ class DoiNoSumarioPlugin extends GenericPlugin {
 
         $submission = $templateMgr->getTemplateVars('article');
         $doiUrl = $this->getArticleDoiUrl($submission);
-        
+
         if(!is_null($doiUrl)) {
             $templateMgr->assign('doiUrl', $doiUrl);
             $output .= $templateMgr->fetch($this->getTemplateResource('doi_summary.tpl'));
@@ -47,27 +48,33 @@ class DoiNoSumarioPlugin extends GenericPlugin {
     {
         $publication = $article->getCurrentPublication();
         $doi = $publication->getData('pub-id::doi');
-        
-        if(empty($doi)) return null;
+
+        if(empty($doi)) {
+            return null;
+        }
 
         return "https://doi.org/$doi";
     }
 
-    public function getDisplayName(){
-        return __('plugins.generic.doiNoSumario.displayName');
+    public function getDisplayName()
+    {
+        return __('plugins.generic.doiInSummary.displayName');
     }
 
-    public function getDescription(){
-        return __('plugins.generic.doiNoSumario.description');
+    public function getDescription()
+    {
+        return __('plugins.generic.doiInSummary.description');
     }
 
-    public function clearCache($hookName, $args){
+    public function clearCache($hookName, $args)
+    {
         $templateMgr = TemplateManager::getManager();
         $templateMgr->clearTemplateCache();
         return false;
     }
 
-    public function getInstallSitePluginSettingsFile(){
+    public function getInstallSitePluginSettingsFile()
+    {
         return $this->getPluginPath() . '/settings.xml';
     }
 }

@@ -1,4 +1,4 @@
-<div id="doi_article-{$article->getId()}" class='doiNoSumario'>
+<div id="doi_article-{$article->getId()}" class='doiInSummary'>
     <strong>{translate key="plugins.pubIds.doi.readerDisplayName"}:</strong>
     <a href="{$doiUrl}">{$doiUrl}</a>
 </div>
