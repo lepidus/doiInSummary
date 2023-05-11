@@ -20,14 +20,18 @@ class DoiInSummaryPlugin extends GenericPlugin
             HookRegistry::register('Templates::Issue::Issue::Article', array($this, 'addDoiToArticleSummary'));
 
             $this->addLocaleData();
-
-            $request = Application::getRequest();
-            $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/doi.css';
-            $templateMgr = TemplateManager::getManager($request);
-            $templateMgr->addStyleSheet('doiCSS', $url);
+            $this->addDoiStyleSheet();
         }
 
         return true;
+    }
+
+    private function addDoiStyleSheet()
+    {
+        $request = Application::getRequest();
+        $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/styles/doi.css';
+        $templateMgr = TemplateManager::getManager($request);
+        $templateMgr->addStyleSheet('doiCSS', $url);
     }
 
     public function addDoiToArticleSummary($hookName, $args)
