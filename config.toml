@@ -1,6 +1,0 @@
-concurrent = 1
-
-[[runners]]
-  name = "shell executor runner"
-  executor = "shell"
-  shell = "bash"
