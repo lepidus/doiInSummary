@@ -17,6 +17,6 @@ The latest release of this plugin is compatible with the following PKP applicati
 
 # License
 
-__This plugin is licensed under the GNU General Public License v2__
+__This plugin is licensed under the GNU General Public License v3__
 
 __Copyright (c) 2015-2023 Lepidus Tecnologia__
