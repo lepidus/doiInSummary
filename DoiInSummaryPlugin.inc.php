@@ -28,7 +28,7 @@ class DoiInSummaryPlugin extends GenericPlugin
 
     private function addDoiStyleSheet()
     {
-        $request = Application::getRequest();
+        $request = Application::get()->getRequest();
         $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/styles/doi.css';
         $templateMgr = TemplateManager::getManager($request);
         $templateMgr->addStyleSheet('doiCSS', $url);
