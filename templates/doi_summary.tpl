@@ -7,7 +7,7 @@
     function insertAfter(newNode, referenceNode) {ldelim}
         referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
     {rdelim}
-    
+
     function updateDoiPosition(){ldelim}
         const doiDiv = document.getElementById('doi_article-{$article->getId()}');
         const articleSummary = doiDiv.parentNode;
@@ -23,6 +23,6 @@
             insertAfter(doiDiv, title);
         {rdelim}
     {rdelim}
-    
+
     updateDoiPosition();
 </script>
