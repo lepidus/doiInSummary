@@ -1,13 +1,18 @@
 <div id="doi_article-{$article->getId()}" class='doiInSummary'>
-    <strong>{translate key="plugins.pubIds.doi.readerDisplayName"}:</strong>
-    <a href="{$doiUrl}">{$doiUrl}</a>
+    <strong>
+        {capture assign=translatedDOI}{translate key="doi.readerDisplayName"}{/capture}
+        {translate key="semicolon" label=$translatedDOI}
+    </strong>
+    <a href="{$doiUrl|escape}">
+        {$doiUrl}
+    </a>
 </div>
 
 <script>
     function insertAfter(newNode, referenceNode) {ldelim}
         referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
     {rdelim}
-    
+
     function updateDoiPosition(){ldelim}
         const doiDiv = document.getElementById('doi_article-{$article->getId()}');
         const articleSummary = doiDiv.parentNode;
@@ -23,6 +28,6 @@
             insertAfter(doiDiv, title);
         {rdelim}
     {rdelim}
-    
+
     updateDoiPosition();
 </script>

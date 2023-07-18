@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * @file plugins/generic/doiInSummary/DoiInSummaryPlugin.inc.php
+ *
  * Copyright (c) 2015-2023 Lepidus Tecnologia
  * Distributed under the GNU GPL v3. For full terms see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt.
  */
@@ -11,74 +13,64 @@ class DoiInSummaryPlugin extends GenericPlugin
 {
     public function register($category, $path, $mainContextId = null)
     {
+        $success = parent::register($category, $path);
 
-        if (!parent::register($category, $path, $mainContextId)) {
-            return false;
-        }
-
-        if($this->getEnabled($mainContextId)) {
-            HookRegistry::register('Templates::Issue::Issue::Article', array($this, 'addDoiToArticleSummary'));
+        if ($success && $this->getEnabled()) {
+            HookRegistry::register('Templates::Issue::Issue::Article', [$this, 'addDoiToArticleSummary']);
 
             $this->addLocaleData();
             $this->addDoiStyleSheet();
         }
 
-        return true;
+        return $success;
     }
 
-    private function addDoiStyleSheet()
-    {
-        $request = Application::get()->getRequest();
-        $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/styles/doi.css';
-        $templateMgr = TemplateManager::getManager($request);
-        $templateMgr->addStyleSheet('doiCSS', $url);
-    }
-
-    public function addDoiToArticleSummary($hookName, $args)
-    {
-        $templateMgr =& $args[1];
-        $output =& $args[2];
-
-        $submission = $templateMgr->getTemplateVars('article');
-        $doiUrl = $this->getArticleDoiUrl($submission);
-
-        if(!is_null($doiUrl)) {
-            $templateMgr->assign('doiUrl', $doiUrl);
-            $output .= $templateMgr->fetch($this->getTemplateResource('doi_summary.tpl'));
-        }
-    }
-
-    private function getArticleDoiUrl($article): ?string
-    {
-        $publication = $article->getCurrentPublication();
-        $doi = $publication->getData('pub-id::doi');
-
-        if(empty($doi)) {
-            return null;
-        }
-
-        return "https://doi.org/$doi";
-    }
-
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         return __('plugins.generic.doiInSummary.displayName');
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return __('plugins.generic.doiInSummary.description');
     }
 
-    public function clearCache($hookName, $args)
+    public function addDoiToArticleSummary(string $hookName, array $args): bool
     {
-        $templateMgr = TemplateManager::getManager();
-        $templateMgr->clearTemplateCache();
+        $templateMgr = &$args[1];
+        $output = &$args[2];
+
+        $submission = $templateMgr->getTemplateVars('article');
+        $doiUrl = $this->getArticleDoiUrl($submission);
+
+        if (!is_null($doiUrl)) {
+            $templateMgr->assign('doiUrl', $doiUrl);
+            $output .= $templateMgr->fetch($this->getTemplateResource('doi_summary.tpl'));
+        }
+
         return false;
     }
 
-    public function getInstallSitePluginSettingsFile()
+    private function getArticleDoiUrl(Submission $article): ?string
     {
-        return $this->getPluginPath() . '/settings.xml';
+        $publication = $article->getCurrentPublication();
+        $doiObject = $publication->getData('doiObject');
+
+        if(is_null($doiObject)) {
+            return null;
+        }
+
+        $doiUrl = $doiObject->getData('resolvingUrl');
+
+        return $doiUrl;
+    }
+
+    private function addDoiStyleSheet(): void
+    {
+        $request = Application::get()->getRequest();
+        $templateMgr = TemplateManager::getManager($request);
+
+        $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/styles/doi.css';
+        $templateMgr->addStyleSheet('doiCSS', $url);
     }
 }

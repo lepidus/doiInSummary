@@ -1,4 +1,4 @@
-# DOI in Summary 
+# DOI in Summary
 
 This plugin was built with the purpose of facilitating the visualization of the DOI (Digital Object Identifier) in the summary of the issues of a journal.
 
