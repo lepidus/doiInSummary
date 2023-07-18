@@ -55,6 +55,11 @@ class DoiInSummaryPlugin extends GenericPlugin
     {
         $publication = $article->getCurrentPublication();
         $doiObject = $publication->getData('doiObject');
+
+        if(is_null($doiObject)) {
+            return null;
+        }
+
         $doiUrl = $doiObject->getData('resolvingUrl');
 
         return $doiUrl;
