@@ -54,13 +54,10 @@ class DoiInSummaryPlugin extends GenericPlugin
     private function getArticleDoiUrl(Submission $article): ?string
     {
         $publication = $article->getCurrentPublication();
-        $doi = $publication->getData('pub-id::doi');
+        $doiObject = $publication->getData('doiObject');
+        $doiUrl = $doiObject->getData('resolvingUrl');
 
-        if (empty($doi)) {
-            return null;
-        }
-
-        return "https://doi.org/{$doi}";
+        return $doiUrl;
     }
 
     private function addDoiStyleSheet(): void

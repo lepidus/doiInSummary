@@ -1,6 +1,11 @@
 <div id="doi_article-{$article->getId()}" class='doiInSummary'>
-    <strong>{translate key="plugins.pubIds.doi.readerDisplayName"}:</strong>
-    <a href="{$doiUrl}">{$doiUrl}</a>
+    <strong>
+        {capture assign=translatedDOI}{translate key="doi.readerDisplayName"}{/capture}
+        {translate key="semicolon" label=$translatedDOI}
+    </strong>
+    <a href="{$doiUrl|escape}">
+        {$doiUrl}
+    </a>
 </div>
 
 <script>
