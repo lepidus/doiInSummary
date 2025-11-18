@@ -27,12 +27,12 @@ class DoiInTOCPlugin extends GenericPlugin
 
     public function getDisplayName(): string
     {
-        return __('plugins.generic.doiInSummary.displayName');
+        return __('plugins.generic.doiInTOC.displayName');
     }
 
     public function getDescription(): string
     {
-        return __('plugins.generic.doiInSummary.description');
+        return __('plugins.generic.doiInTOC.description');
     }
 
     public function addDoiToArticleSummary(string $hookName, array $args): bool
@@ -45,7 +45,7 @@ class DoiInTOCPlugin extends GenericPlugin
 
         if (!is_null($doiUrl)) {
             $templateMgr->assign('doiUrl', $doiUrl);
-            $output .= $templateMgr->fetch($this->getTemplateResource('doi_summary.tpl'));
+            $output .= $templateMgr->fetch($this->getTemplateResource('doi_toc.tpl'));
         }
 
         return false;
