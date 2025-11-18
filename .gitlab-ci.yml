@@ -1,5 +1,5 @@
 variables:
-    PLUGIN_NAME : 'doiInSummary'
+    PLUGIN_NAME : 'doiInTOC'
 
 include:
   - project: 'documentacao-e-tarefas/modelosparaintegracaocontinua'

@@ -1,12 +1,12 @@
-# DOI in Summary
+# DOI in TOC
 
-This plugin was built with the purpose of facilitating the visualization of the DOI (Digital Object Identifier) in the summary of the issues of a journal.
+This plugin was built with the purpose of facilitating the visualization of the DOI (Digital Object Identifier) in the TOC of the issues of a journal.
 
 # Compatibility
 
 The latest release of this plugin is compatible with the following PKP applications:
 
-* OJS 3.3.0
+* OJS 3.3.0 and 3.4.0
 
 # Installation
 

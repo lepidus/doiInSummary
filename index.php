@@ -10,4 +10,4 @@
 
 require_once('DoiInSummaryPlugin.inc.php');
 
-return new DoiInSummaryPlugin();
+return new DoiInTOCPlugin();
