@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file plugins/generic/doiInSummary/DoiInSummaryPlugin.inc.php
+ * @file plugins/generic/doiInTOC/DoiInTOCPlugin.inc.php
  *
  * Copyright (c) 2015-2023 Lepidus Tecnologia
  * Distributed under the GNU GPL v3. For full terms see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt.
@@ -9,7 +9,7 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
-class DoiInSummaryPlugin extends GenericPlugin
+class DoiInTOCPlugin extends GenericPlugin
 {
     public function register($category, $path, $mainContextId = null)
     {
@@ -56,7 +56,7 @@ class DoiInSummaryPlugin extends GenericPlugin
         $publication = $article->getCurrentPublication();
         $doiObject = $publication->getData('doiObject');
 
-        if(is_null($doiObject)) {
+        if (is_null($doiObject)) {
             return null;
         }
 

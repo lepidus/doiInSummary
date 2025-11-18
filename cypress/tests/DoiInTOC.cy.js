@@ -1,4 +1,4 @@
-describe('DOI In Summary plugin tests', function () {
+describe('DOI In TOC plugin tests', function () {
     it('Creates and exercises a static page', function () {
         const title = 'The Signalling Theory Dividends';
 
@@ -8,7 +8,7 @@ describe('DOI In Summary plugin tests', function () {
         cy.get('button[id="plugins-button"]').click();
 
         cy.get('input[id^="select-cell-doiinsummaryplugin-enabled"]').click();
-        cy.get('div:contains(\'The plugin "DOI in summary" has been enabled.\')');
+        cy.get('div:contains(\'The plugin "DOI in TOC" has been enabled.\')');
 
         cy.visit('/index.php/publicknowledge/dois');
         cy.get('.doiListPanel .listPanel__item:contains(' + title + ') .listPanel__itemActions .expander').click();
