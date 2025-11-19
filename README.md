@@ -1,6 +1,6 @@
-# DOI in Summary
+# DOI in TOC
 
-This plugin was built with the purpose of facilitating the visualization of the DOI (Digital Object Identifier) in the summary of the issues of a journal.
+This plugin was built with the purpose of facilitating the visualization of the DOI (Digital Object Identifier) in the TOC of the issues of a journal.
 
 # Compatibility
 
