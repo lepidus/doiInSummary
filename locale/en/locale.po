@@ -11,8 +11,8 @@ msgstr ""
 "PO-Revision-Date: 2021-09-30T18:31:33+00:00\n"
 "Language: \n"
 
-msgid "plugins.generic.doiInTOC.displayName"
-msgstr "DOI in TOC"
+msgid "plugins.generic.doiInSummary.displayName"
+msgstr "DOI in summary"
 
-msgid "plugins.generic.doiInTOC.description"
-msgstr "Shows the DOI of the articles in the TOC of issues and in the home page."
+msgid "plugins.generic.doiInSummary.description"
+msgstr "Shows the DOI of the articles in the summary of issues and in the home page."
