@@ -1,4 +1,4 @@
-<div id="doi_article-{$article->getId()}" class='doiInTOC'>
+<div id="doi_article-{$article->getId()}" class='doiInSummary'>
     <strong>
         {capture assign=translatedDOI}{translate key="doi.readerDisplayName"}{/capture}
         {translate key="semicolon" label=$translatedDOI}
