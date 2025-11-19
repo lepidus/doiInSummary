@@ -7,7 +7,7 @@ describe('DOI In TOC plugin tests', function () {
         cy.get('.app__nav a').contains('Website').click();
         cy.get('button[id="plugins-button"]').click();
 
-        cy.get('input[id^="select-cell-doiintocplugin-enabled"]').click();
+        cy.get('input[id^="select-cell-doiinsummaryplugin-enabled"]').click();
         cy.get('div:contains(\'The plugin "DOI in TOC" has been enabled.\')');
 
         cy.visit('/index.php/publicknowledge/dois');
@@ -17,6 +17,6 @@ describe('DOI In TOC plugin tests', function () {
         cy.get('.doiListPanel .listPanel__item:contains(' + title + ') button:contains(Save)').click();
 
         cy.visit('/index.php/publicknowledge');
-        cy.get('.obj_article_summary:contains(' + title + ') .doiInTOC a').contains('10.1234/a6f4l3').and('have.attr', 'href', 'https://doi.org/10.1234/a6f4l3');
+        cy.get('.obj_article_summary:contains(' + title + ') .doiInSummary a').contains('10.1234/a6f4l3').and('have.attr', 'href', 'https://doi.org/10.1234/a6f4l3');
     });
 })
