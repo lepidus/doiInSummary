@@ -1,12 +1,14 @@
-# DOI in Summary 
+# DOI in TOC
 
-This plugin was built with the purpose of facilitating the visualization of the DOI (Digital Object Identifier) in the summary of the issues of a journal.
+This plugin was built with the purpose of facilitating the visualization of the Digital Object Identifier (DOI) in the Table of Contents (TOC) of the issues of a journal.
 
 # Compatibility
 
-The latest release of this plugin is compatible with the following PKP applications:
+A version compatible with OJS 3.3.0.x is available in the [stable-3_3_0](https://github.com/lepidus/doiInSummary/tree/stable-3_3_0) branch.
 
-* OJS 3.3.0
+* Plugin version v1.x.x.x is compatible with OJS 3.3.0.x
+
+You can find the latest version of the plugin compatible with your OJS version in the [Releases page](https://github.com/lepidus/doiInSummary/releases).
 
 # Installation
 
