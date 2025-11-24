@@ -1,6 +1,6 @@
 # DOI in TOC
 
-This plugin was built with the purpose of facilitating the visualization of the DOI (Digital Object Identifier) in the TOC of the issues of a journal.
+This plugin was built with the purpose of facilitating the visualization of the Digital Object Identifier (DOI) in the Table of Contents (TOC) of the issues of a journal.
 
 # Compatibility
 
@@ -24,4 +24,4 @@ You can find the latest version of the plugin compatible with your OJS version i
 
 __This plugin is licensed under the GNU General Public License v3__
 
-__Copyright (c) 2015-2023 Lepidus Tecnologia__
+__Copyright (c) 2015-2025 Lepidus Tecnologia__
