@@ -9,8 +9,8 @@
 <version>
 	<application>doiInSummary</application>
 	<type>plugins.generic</type>
-	<release>1.4.0.0</release>
-	<date>2025-11-24</date>
+	<release>1.4.1.0</release>
+	<date>2025-11-27</date>
 	<lazy-load>0</lazy-load>
 	<class>DoiInSummaryPlugin</class>
 </version>
