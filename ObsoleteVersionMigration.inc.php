@@ -27,10 +27,14 @@ class ObsoleteVersionMigration extends Migration
                     ->update(['setting_value' => $row->setting_value]);
 
                 # Remove old plugin settings
-                Capsule::table('plugin_settings')
-                    ->where('plugin_name', 'doinosumarioplugin')
-                    ->where('context_id', $row->context_id)
-                    ->delete();
+                $pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
+                $pluginSettingsDao->updateSetting(
+                    $row->context_id,
+                    'doinosumarioplugin',
+                    'enabled',
+                    $row->setting_value,
+                    'bool'
+                );
             });
 
         # Delete old plugin version record
