@@ -15,4 +15,4 @@ msgid "plugins.generic.doiInSummary.displayName"
 msgstr "DOI in TOC"
 
 msgid "plugins.generic.doiInSummary.description"
-msgstr "Shows the DOI of the articles in the TOC of issues and in the home page."
+msgstr "Shows the Digital Object Identifier (DOI) of the articles in the Table of Contents (TOC) of issues and in the home page."
