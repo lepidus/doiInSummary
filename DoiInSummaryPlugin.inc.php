@@ -81,4 +81,10 @@ class DoiInSummaryPlugin extends GenericPlugin
     {
         return $this->getPluginPath() . '/settings.xml';
     }
+
+    public function getInstallMigration()
+    {
+        $this->import('ObsoleteVersionMigration');
+        return new ObsoleteVersionMigration();
+    }
 }
