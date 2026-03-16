@@ -46,6 +46,9 @@ class ObsoleteVersionMigration extends Migration
     private function deleteObsoletePlugin()
     {
         $plugin = PluginRegistry::getPlugin('generic', 'doinosumarioplugin');
+        if (!$plugin) {
+            return;
+        }
         $category = $plugin->getCategory();
         $productName = basename($plugin->getPluginPath());
 
