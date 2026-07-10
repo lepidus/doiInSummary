@@ -10,13 +10,13 @@ describe('DOI In TOC plugin tests', function () {
         cy.get('input[id^="select-cell-doiinsummaryplugin-enabled"]').click();
         cy.get('div:contains(\'The plugin "DOI in TOC" has been enabled.\')');
 
-        cy.visit('/index.php/publicknowledge/dois');
+        cy.visit('/index.php/publicknowledge/en/dois');
         cy.get('.doiListPanel .listPanel__item:contains(' + title + ') .listPanel__itemActions .expander').click();
         cy.get('.doiListPanel .listPanel__item:contains(' + title + ') button:contains(Edit)').click();
         cy.get('.doiListPanel .listPanel__item:contains(' + title + ') table input[type="text"]').type('10.1234/a6f4l3');
         cy.get('.doiListPanel .listPanel__item:contains(' + title + ') button:contains(Save)').click();
 
-        cy.visit('/index.php/publicknowledge');
+        cy.visit('/index.php/publicknowledge/en');
         cy.get('.obj_article_summary:contains(' + title + ') .doiInSummary a').contains('10.1234/a6f4l3').and('have.attr', 'href', 'https://doi.org/10.1234/a6f4l3');
     });
 })

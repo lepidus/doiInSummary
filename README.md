@@ -4,12 +4,14 @@ This plugin was built with the purpose of facilitating the visualization of the 
 
 # Compatibility
 
-The main branch of this repository is compatible with OJS 3.4.0.x.
+The main branch of this repository is compatible with OJS 3.5.0.x.
 
 A version compatible with OJS 3.3.0.x is available in the [stable-3_3_0](https://github.com/lepidus/doiInSummary/tree/stable-3_3_0) branch.
+A version compatible with OJS 3.4.0.x is available in the [stable-3_4_0](https://github.com/lepidus/doiInSummary/tree/stable-3_4_0) branch.
 
 * Plugin version v1.x.x.x is compatible with OJS 3.3.0.x
 * Plugin version v2.x.x.x is compatible with OJS 3.4.0.x
+* Plugin version v3.x.x.x is compatible with OJS 3.5.0.x
 
 You can find the latest version of the plugin compatible with your OJS version in the [Releases page](https://github.com/lepidus/doiInSummary/releases).
 

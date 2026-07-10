@@ -1,22 +1,28 @@
 <?php
 
 /**
- * @file plugins/generic/doiInSummary/DoiInSummaryPlugin.inc.php
+ * @file plugins/generic/doiInSummary/DoiInSummaryPlugin.php
  *
- * Copyright (c) 2015-2023 Lepidus Tecnologia
+ * Copyright (c) 2015-2026 Lepidus Tecnologia
  * Distributed under the GNU GPL v3. For full terms see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt.
  */
 
-import('lib.pkp.classes.plugins.GenericPlugin');
+namespace APP\plugins\generic\doiInSummary;
+
+use APP\core\Application;
+use APP\submission\Submission;
+use APP\template\TemplateManager;
+use PKP\plugins\GenericPlugin;
+use PKP\plugins\Hook;
 
 class DoiInSummaryPlugin extends GenericPlugin
 {
-    public function register($category, $path, $mainContextId = null)
+    public function register($category, $path, $mainContextId = null): bool
     {
-        $success = parent::register($category, $path);
+        $success = parent::register($category, $path, $mainContextId);
 
-        if ($success && $this->getEnabled()) {
-            HookRegistry::register('Templates::Issue::Issue::Article', [$this, 'addDoiToArticleSummary']);
+        if ($success && $this->getEnabled($mainContextId)) {
+            Hook::add('Templates::Issue::Issue::Article', $this->addDoiToArticleSummary(...));
 
             $this->addLocaleData();
             $this->addDoiStyleSheet();
@@ -37,13 +43,13 @@ class DoiInSummaryPlugin extends GenericPlugin
 
     public function addDoiToArticleSummary(string $hookName, array $args): bool
     {
-        $templateMgr = &$args[1];
+        $templateMgr = $args[1];
         $output = &$args[2];
 
         $submission = $templateMgr->getTemplateVars('article');
         $doiUrl = $this->getArticleDoiUrl($submission);
 
-        if (!is_null($doiUrl)) {
+        if ($doiUrl !== null) {
             $templateMgr->assign('doiUrl', $doiUrl);
             $output .= $templateMgr->fetch($this->getTemplateResource('doi_summary.tpl'));
         }
@@ -53,24 +59,25 @@ class DoiInSummaryPlugin extends GenericPlugin
 
     private function getArticleDoiUrl(Submission $article): ?string
     {
-        $publication = $article->getCurrentPublication();
-        $doiObject = $publication->getData('doiObject');
+        $doiUrl = $article->getCurrentPublication()
+            ?->getData('doiObject')
+            ?->getData('resolvingUrl');
 
-        if (is_null($doiObject)) {
-            return null;
-        }
-
-        $doiUrl = $doiObject->getData('resolvingUrl');
-
-        return $doiUrl;
+        return $doiUrl ?: null;
     }
 
     private function addDoiStyleSheet(): void
     {
         $request = Application::get()->getRequest();
         $templateMgr = TemplateManager::getManager($request);
-
         $url = $request->getBaseUrl() . '/' . $this->getPluginPath() . '/styles/doi.css';
-        $templateMgr->addStyleSheet('doiCSS', $url);
+
+        $templateMgr->addStyleSheet(
+            'doiCSS',
+            $url,
+            [
+                'contexts' => ['frontend'],
+            ]
+        );
     }
 }
