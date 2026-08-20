@@ -10,7 +10,7 @@
 	<application>doiInSummary</application>
 	<type>plugins.generic</type>
 	<release>3.0.0.0</release>
-	<date>2026-07-05</date>
+	<date>2026-08-20</date>
 	<lazy-load>1</lazy-load>
 	<class>DoiInSummaryPlugin</class>
 </version>
