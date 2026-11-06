@@ -1,6 +1,6 @@
 <div id="doi_article-{$article->getId()}" class='doiInSummary'>
     <strong>{translate key="plugins.pubIds.doi.readerDisplayName"}:</strong>
-    <a href="{$doiUrl}">{$doiUrl}</a>
+    <a href="{$doiUrl|escape}">{$doiUrl|escape}</a>
 </div>
 
 <script>
