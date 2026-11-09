@@ -57,7 +57,18 @@ class DoiInSummaryPlugin extends GenericPlugin
             return null;
         }
 
-        return "https://doi.org/$doi";
+        return 'https://doi.org/' . $this->encodeDoiForUrl($doi);
+    }
+
+    /**
+     * Encode a DOI for a URL as the OJS 3.3 DOI plugin does
+     * (DOIPubIdPlugin::_doiURLEncode, ANSI/NISO Z39.84-2005, Appendix E).
+     */
+    private function encodeDoiForUrl(string $doi): string
+    {
+        $search = ['%', '"', '#', ' ', '<', '>', '{'];
+        $replace = ['%25', '%22', '%23', '%20', '%3c', '%3e', '%7b'];
+        return str_replace($search, $replace, $doi);
     }
 
     public function getDisplayName()
